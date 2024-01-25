@@ -1,7 +1,9 @@
 import { loadHeaderFooter } from './utils.mjs';
 loadHeaderFooter();
 
-const url = 'http://localhost:3003/input';
+const url = 'http://localhost:3008/schedule';
+
+const user = 'TKENT';
 
 // Send a POST request
 const form = document.querySelector('form');
@@ -19,31 +21,25 @@ form.addEventListener('submit', async (event) => {
     let myRequestDate = new Date();
     myRequestDate.setDate(myRequestDate.getDate());
     myRequestDate = myRequestDate.toISOString().slice(0, 10);
-
-    let due_date = new Date();
-    due_date.setDate(due_date.getDate() + 14);
     
     const dataJson = {
-        INPUT_ID: nextId,
-        INPUT_DATE: myRequestDate,
+        AUDIT_MANAGER_ID: nextId,
         CREATE_DATE: myRequestDate,
-        CREATE_BY: 'TKENT',
-        CLOSED: 'N',
-        DUE_DATE: due_date.toISOString().slice(0, 10),
+        CREATE_BY: user,
     };
     for (let field of data.keys()) {
         // console.log(field);
         switch (field) {
-            case 'PEOPLE_ID':
+            case 'LEAD_AUDITOR':
                 dataJson[field] = data.get(field).toUpperCase();
                 break;
-            case 'ASSIGNED_TO':
+            case 'AUDITEE':
                 dataJson[field] = data.get(field).toUpperCase();
                 break;
             case 'SUBJECT':
                 dataJson[field] = data.get(field).toUpperCase();
                 break;
-            case 'PROJECT_ID':
+            case 'RESULT':
                 dataJson[field] = data.get(field).toUpperCase();
                 break;
             default:
@@ -57,7 +53,7 @@ form.addEventListener('submit', async (event) => {
                 }
         }
     }
-    
+    console.log("56");
     console.log(dataJson);
 
     try {

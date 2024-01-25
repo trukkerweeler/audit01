@@ -22,7 +22,7 @@ button.addEventListener('click', async (event) => {
         }
     }
 
-    const url = 'http://localhost:3003/input/' + aidValue;
+    const url = 'http://localhost:3008/schedule/' + aidValue;
 
     // Delete the child nodes of the main element
     while (main.firstChild) {
@@ -111,9 +111,9 @@ button.addEventListener('click', async (event) => {
             const controlTextTitle = document.createElement('h3');
             const linebreak = document.createElement('br');
 
-            elemRpt.textContent = 'Action Item Detail';
+            elemRpt.textContent = 'Schedule Detail';
             elemRpt.setAttribute('class', 'header');
-            elemId.textContent = 'Action Id: ' + record[key]['INPUT_ID'];
+            elemId.textContent = 'Schedule Id: ' + record[key]['INPUT_ID'];
             elemId.setAttribute('class', 'header2');
 
             detailSection.appendChild(aiDate);
@@ -200,7 +200,7 @@ modalsave.addEventListener('click', async (event) => {
         }
     }
 
-    const url = 'http://localhost:3003/input/' + aidValue;
+    const url = 'http://localhost:3008/schedule/' + aidValue;
     // console.log(url);
 
     const inputtext = document.querySelector("#inputtext");
@@ -291,7 +291,7 @@ closeaction.addEventListener('click', async (event) => {
         }
     }
 
-    const url = 'http://localhost:3003/input/close/' + aidValue;
+    const url = 'http://localhost:3008/schedule/close/' + aidValue;
     // console.log(url);
 
     let data = {

@@ -9,18 +9,20 @@
     <link  rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abel&family=Tapestry&display=swap">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="images/ci-logo.png">
-    <title>Input - Entry</title>
+    <title>Schedule - Add</title>
 </head>
 <body>
     <header id="header"></header>
-    <h1>Add Input</h1>
+    <h1>Schedule Audit</h1>
     <main id="main">
         <form action="submit" name="form" id="entryform">
-            <label for="PEOPLE_ID">Requestor</label>
-            <input type="text" name="PEOPLE_ID" id="reqby" placeholder="Enter requestor ID">
-            <label for="ASSIGNED_TO">Assignee</label>
-            <input type="text" name="ASSIGNED_TO" id="assto" placeholder="Enter assigned ID">
-            <label for="corType">Input Type</label>
+            <label for="AUDIT_ID">Audit Id:</label>
+            <input type="text" name="AUDIT_ID" id="AUDIT_ID" placeholder="Enter the Audit Id">
+            <label for="Standard">Standard</label>
+            <input type="text" name="STANDARD" id="standard" placeholder="Enter the Standard">
+            <label for="SUBJECT">Subject</label>
+            <input type="text" name="SUBJECT" id="subject" placeholder="Enter subject">
+            <!-- <label for="corType">Input Type</label>
             <select name="INPUT_TYPE" id="inpType">
                 <option value="REQ" selected>Request</option>
                 <option value="BUY">Purchase</option>
@@ -32,18 +34,18 @@
                 <option value="RISK">Risk</option>
                 <option value="OPPR">Opportunity</option>
                 <option value="TRN">Train</option>
-            </select>
-            <label for="SUBJECT">Subject</label>
-            <input type="text" name="SUBJECT" id="subject" placeholder="Enter subject">
-            <label for="INPUT_TEXT">Request</label>
-            <input type="textarea" name="INPUT_TEXT" id="inputtext" placeholder="Enter request text">          
-            <label for="PROJECT_ID">Project</label>
-            <input type="text" name="PROJECT_ID" id="projid" placeholder="Project ID">                                 
+            </select> -->
             
+            <label for="LEAD_AUDITOR">Auditor</label>
+            <input type="text" name="LEAD_AUDITOR" id="auditor" placeholder="Enter auditor">          
+            <label for="AUDITEE">Auditee</label>
+            <input type="text" name="AUDITEE1" id="auditee" placeholder="enter auditee">
+            <label for="SCHEDULED_DATE">Date</label>
+            <input type="date" name="SCHEDULED_DATE" id="SCHEDULED_DATE" placeholder="Enter schedule date">
             <input type="submit" value="Submit" id="button">
         </form>
     </main>
     <footer id="footer"></footer>
 </body>
-<script type="module" src="/js/entry.js"></script>
+<script type="module" src="/js/schedule.js"></script>
 </html>

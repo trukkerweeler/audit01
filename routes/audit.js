@@ -25,17 +25,7 @@ router.get('/', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = `select pi.INPUT_ID
-        , pi.INPUT_DATE
-        , pi.SUBJECT
-        , pi.ASSIGNED_TO
-        , pi.PROJECT_ID
-        , pit.INPUT_TEXT
-        , pi.DUE_DATE
-        , pi.CLOSED
-        , pi.CLOSED_DATE 
-        from PEOPLE_INPUT pi left join PPL_INPT_TEXT pit on pi.INPUT_ID = pit.INPUT_ID order by pi.INPUT_ID desc`;
-        // where USER_DEFINED_1 = 'MR'
+        const query = `select * from AUDIT_MANAGER order by AUDIT_MANAGER_ID desc`;
         
         connection.query(query, (err, rows, fields) => {
             if (err) {
@@ -60,7 +50,6 @@ router.get('/', (req, res) => {
 
 // Get the next ID for a new record
 router.get('/nextId', (req, res) => {
-    // res.json('0000005');
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -76,10 +65,10 @@ router.get('/nextId', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = 'SELECT CURRENT_ID FROM SYSTEM_IDS where TABLE_NAME = "PEOPLE_INPUT"';
+        const query = 'SELECT CURRENT_ID FROM SYSTEM_IDS where TABLE_NAME = "AUDIT_MANAGER"';
         connection.query(query, (err, rows, fields) => {
             if (err) {
-                console.log('Failed to query for attendance: ' + err);
+                console.log('Failed to query for current id: ' + err);
                 res.sendStatus(500);
                 return;
             }
@@ -92,7 +81,7 @@ router.get('/nextId', (req, res) => {
         connection.end();
         });
     } catch (err) {
-        console.log('Error connecting to Db 83');
+        console.log('Error connecting to Db 94');
         return;
     }
 });
@@ -100,6 +89,8 @@ router.get('/nextId', (req, res) => {
 // ==================================================
 // Create a record
 router.post('/', (req, res) => {
+    // console.log('102');
+    // console.log(req.body);
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -115,57 +106,52 @@ router.post('/', (req, res) => {
             }
         // console.log('Connected to DB');
              
-        const query = `insert into PEOPLE_INPUT (INPUT_ID
-            , INPUT_DATE
-            , PEOPLE_ID
-            , ASSIGNED_TO
-            , DUE_DATE
-            , INPUT_TYPE
+        const query = `insert into AUDIT_MANAGER (AUDIT_MANAGER_ID
+            , AUDIT_ID
+            , STANDARD
             , SUBJECT
-            , PROJECT_ID
-            , CLOSED
-            , CREATE_DATE
+            , SCHEDULED_DATE
+            , LEAD_AUDITOR
+            , AUDITEE1
             , CREATE_BY
+            , CREATE_DATE
             ) values (
-                '${req.body.INPUT_ID}'
-                , '${req.body.INPUT_DATE}'
-                , '${req.body.PEOPLE_ID}'
-                , '${req.body.ASSIGNED_TO}'
-                , '${req.body.DUE_DATE}'
-                , '${req.body.INPUT_TYPE}'
+                '${req.body.AUDIT_MANAGER_ID}'
+                , '${req.body.AUDIT_ID}'
+                , '${req.body.STANDARD}'
                 , '${req.body.SUBJECT}'
-                , '${req.body.PROJECT_ID}'
-                , '${req.body.CLOSED}'
-                , '${req.body.CREATE_DATE}'
+                , '${req.body.SCHEDULED_DATE}'
+                , '${req.body.LEAD_AUDITOR}'
+                , '${req.body.AUDITEE1}'
                 , '${req.body.CREATE_BY}'
+                , '${req.body.CREATE_DATE}'
             )`;
         
         // console.log(query);
 
         connection.query(query, (err, rows, fields) => {
             if (err) {
-                console.log('Failed to query for PEOPLE_INPUT insert: ' + err);
+                console.log('Failed to query for AUDIT_MANAGER insert: ' + err);
                 res.sendStatus(500);
                 return;
             }
             res.json(rows);
         });
-
         
-        // escape the apostrophe
-        let inputText = req.body.INPUT_TEXT.replace(/'/g, "\\'");
-        // escape the backslash
-        inputText = req.body.INPUT_TEXT.replace(/\\/g, "\\\\");
-        const insertQuery = `insert into PPL_INPT_TEXT values ('${req.body.INPUT_ID}', '${inputText}')`;
-        connection.query(insertQuery, (err, rows, fields) => {
-            if (err) {
-                console.log('Failed to query for PPL_INPT_TEXT insert: ' + err);
-                res.sendStatus(500);
-                return;
-            }
-        });
+        // // escape the apostrophe
+        // let inputText = req.body.INPUT_TEXT.replace(/'/g, "\\'");
+        // // escape the backslash
+        // inputText = req.body.INPUT_TEXT.replace(/\\/g, "\\\\");
+        // const insertQuery = `insert into PPL_INPT_TEXT values ('${req.body.INPUT_ID}', '${inputText}')`;
+        // connection.query(insertQuery, (err, rows, fields) => {
+        //     if (err) {
+        //         console.log('Failed to query for PPL_INPT_TEXT insert: ' + err);
+        //         res.sendStatus(500);
+        //         return;
+        //     }
+        // });
 
-        const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.INPUT_ID}' WHERE TABLE_NAME = 'PEOPLE_INPUT'`;
+        const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_MANAGER_ID}' WHERE TABLE_NAME = 'AUDIT_MANAGER'`;
         connection.query(updateQuery, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for system id update: ' + err);
@@ -178,7 +164,7 @@ router.post('/', (req, res) => {
         });
 
     } catch (err) {
-        console.log('Error connecting to Db (changes 175)');
+        console.log('Error connecting to Db (changes 170)');
         return;
     }
 

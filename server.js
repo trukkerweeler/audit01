@@ -4,7 +4,7 @@ const exp = require("constants");
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const port = 3003;
+const port = 3008;
 
 app.use(cors());
 
@@ -16,11 +16,11 @@ app.use((req, res, next) => {
   next();
 });
 
-const inputRoutes = require("./routes/input");
-app.use("/input", inputRoutes);
+const auditRoutes = require("./routes/audit");
+app.use("/audit", auditRoutes);
 
-const projectRoutes = require("./routes/project");
-app.use("/project", projectRoutes);
+const scheduleRoutes = require("./routes/schedule");
+app.use("/schedule", scheduleRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
