@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = `select * from AUDIT_MANAGER order by AUDIT_MANAGER_ID desc`;
+        const query = `select * from PROCESS_AUDIT order by AUDIT_ID desc`;
         
         connection.query(query, (err, rows, fields) => {
             if (err) {
@@ -65,7 +65,7 @@ router.get('/nextId', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = 'SELECT CURRENT_ID FROM SYSTEM_IDS where TABLE_NAME = "AUDIT_MANAGER"';
+        const query = 'SELECT CURRENT_ID FROM SYSTEM_IDS where TABLE_NAME = "PROCESS_AUDIT"';
         connection.query(query, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for current id: ' + err);
@@ -106,7 +106,7 @@ router.post('/', (req, res) => {
             }
         // console.log('Connected to DB');
              
-        const query = `insert into AUDIT_MANAGER (AUDIT_MANAGER_ID
+        const query = `insert into PROCESS_AUDIT (AUDIT_MANAGER_ID
             , AUDIT_ID
             , STANDARD
             , SUBJECT
@@ -131,7 +131,7 @@ router.post('/', (req, res) => {
 
         connection.query(query, (err, rows, fields) => {
             if (err) {
-                console.log('Failed to query for AUDIT_MANAGER insert: ' + err);
+                console.log('Failed to query for PROCESS AUDIT insert: ' + err);
                 res.sendStatus(500);
                 return;
             }
@@ -151,7 +151,7 @@ router.post('/', (req, res) => {
         //     }
         // });
 
-        const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_MANAGER_ID}' WHERE TABLE_NAME = 'AUDIT_MANAGER'`;
+        const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_ID}' WHERE TABLE_NAME = 'PROCESS_AUDIT'`;
         connection.query(updateQuery, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for system id update: ' + err);
