@@ -212,7 +212,7 @@ a:hover {
 
 #entryform {
     display: grid;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 27% 73%;
     margin: 2rem auto;
     padding: 1rem;
     background: var(--background-color);

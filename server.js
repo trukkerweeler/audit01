@@ -22,6 +22,9 @@ app.use("/audit", auditRoutes);
 const scheduleRoutes = require("./routes/schedule");
 app.use("/schedule", scheduleRoutes);
 
+const processRoutes = require("./routes/process");
+app.use("/process", processRoutes);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
