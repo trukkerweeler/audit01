@@ -25,6 +25,9 @@ app.use("/schedule", scheduleRoutes);
 const processRoutes = require("./routes/process");
 app.use("/process", processRoutes);
 
+const managerRoutes = require("./routes/manager");
+app.use("/manager", managerRoutes);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

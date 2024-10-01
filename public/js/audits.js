@@ -2,7 +2,7 @@ import { loadHeaderFooter } from './utils.mjs';
 loadHeaderFooter();
 const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATED_DATE'];
 
-const url = 'http://localhost:3008/audit';
+const url = 'http://localhost:3008/schedule';
 
 function getRecords () {
     const main = document.querySelector('main');
@@ -37,7 +37,7 @@ function getRecords () {
                             td.textContent = record[key].slice(0,10);
                         } else {
                             if (key == 'AUDIT_MANAGER_ID') {
-                                td.innerHTML = `<a href="http://localhost:3008/audit.html?id=${record[key]}">${record[key]}</a>`;
+                                td.innerHTML = `<a href="http://localhost:3008/manager.html?id=${record[key]}">${record[key]}</a>`;
                             } else {
                                 td.textContent = record[key];
                             }
@@ -58,10 +58,3 @@ function getRecords () {
 }
 
 getRecords();
-
-const modal = document.getElementById('dialogaddaudit');
-const btnaddaudit = document.querySelector('#btnaddaudit');
-btnaddaudit.addEventListener('click', (event) => {
-    event.preventDefault();
-    modal.showModal();
-});
