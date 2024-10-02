@@ -28,6 +28,9 @@ app.use("/process", processRoutes);
 const managerRoutes = require("./routes/manager");
 app.use("/manager", managerRoutes);
 
+const checklistRoutes = require("./routes/checklist");
+app.use("/checklist", checklistRoutes);
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

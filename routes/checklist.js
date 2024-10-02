@@ -195,7 +195,7 @@ router.get('/:id', (req, res) => {
         left join AUDT_CHKL_RFNC acr on am.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID
         where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
-        console.log(query);
+        // console.log(query);
 
         connection.query(query, (err, rows, fields) => {
             if (err) {
@@ -209,7 +209,7 @@ router.get('/:id', (req, res) => {
         connection.end();
         });
     } catch (err) {
-        console.log('Error connecting to Db 229');
+        console.log('Error connecting to Db 208');
         return;
     }
 });
