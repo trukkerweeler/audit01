@@ -189,10 +189,11 @@ router.get('/:id', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDIT_MANAGER am 
-        left join AUDT_CHKL_QUST acq on am.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID
-        left join AUDT_CHKL_OBSN aco on am.AUDIT_MANAGER_ID = aco.AUDIT_MANAGER_ID
-        left join AUDT_CHKL_RFNC acr on am.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID
+        const query = `SELECT am.*, ac.CHECKLIST_ID, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDIT_MANAGER am 
+        left join AUDIT_CHECKLIST ac on am.AUDIT_MANAGER_ID = ac.AUDIT_MANAGER_ID 
+        left join AUDT_CHKL_QUST acq on ac.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID and ac.CHECKLIST_ID = acq.CHECKLIST_ID
+        left join AUDT_CHKL_OBSN aco on ac.AUDIT_MANAGER_ID = aco.AUDIT_MANAGER_ID and ac.CHECKLIST_ID = aco.CHECKLIST_ID
+        left join AUDT_CHKL_RFNC acr on ac.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID and ac.CHECKLIST_ID = acr.CHECKLIST_ID
         where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
         console.log(query);

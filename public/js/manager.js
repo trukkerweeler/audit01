@@ -4,7 +4,6 @@ loadHeaderFooter();
 // get user value
 const user = getUserValue();
 
-
 // get url parameters
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
@@ -76,31 +75,16 @@ fetch(url, { method: 'GET' })
         const thead = document.createElement('thead');
         const tbody = document.createElement('tbody');
         
-        records.forEach(record => {
-            const tr = document.createElement('tr');
-            // create column headers
-            for (const key in record) {
+        let checklistFields = ['CHECKLIST_ID', 'STANDARD', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
+        
+        for (const key in record[0]) {
+            if (checklistFields.includes(key)) {
                 const th = document.createElement('th');
                 th.textContent = key;
                 thead.appendChild(th);
             }
-            table.appendChild(thead);
-        });
-
-
-        records.forEach(record => {
-            const tr = document.createElement('tr');
-            const td1 = document.createElement('td');
-            td1.textContent = record.AUDIT_MANAGER_ID;
-            tr.appendChild(td1);
-            const td2 = document.createElement('td');
-            td2.textContent = record.CHECKLIST_ID;
-            tr.appendChild(td2);
-            const td3 = document.createElement('td');
-            td3.textContent = record.SUBJECT;
-            tr.appendChild(td3);
-            tbody.appendChild(tr);
-        });
+        }
+        table.appendChild(thead);
 
         table.appendChild(tbody);
         sectionChecklist.appendChild(table);
