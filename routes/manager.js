@@ -196,7 +196,7 @@ router.get('/:id', (req, res) => {
         left join AUDT_CHKL_RFNC acr on ac.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID and ac.CHECKLIST_ID = acr.CHECKLIST_ID
         where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
-        console.log(query);
+        // console.log(query);
 
         connection.query(query, (err, rows, fields) => {
             if (err) {

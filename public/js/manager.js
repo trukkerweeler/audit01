@@ -66,29 +66,70 @@ fetch(url, { method: 'GET' })
         window.location.href = 'checklist.html?id=' + id;
     });
 
-    fetch(checklistUrl + id, { method: 'GET' })
+    // Checklist row div
+    const divChecklistRow = document.createElement('div');
+    divChecklistRow.classList.add('checklist-row');
+
+    fetch(managerUrl + id, { method: 'GET' })
     .then(response => response.json())
     .then(records => {
-        console.log(records);
-
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        const tbody = document.createElement('tbody');
+        console.log(records);    
         
         let checklistFields = ['CHECKLIST_ID', 'STANDARD', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
         
-        for (const key in record[0]) {
-            if (checklistFields.includes(key)) {
-                const th = document.createElement('th');
-                th.textContent = key;
-                thead.appendChild(th);
+        for (const row in records) {
+            console.log(records[row]);
+            
+            for (const key in records[row]) {
+                // console.log(key);
+                if (checklistFields.includes(key)) {
+                    const divcklst = document.createElement('div');
+                    // console.log(key);
+                    // divcklst.classList.add('checklist');
+                    switch (key) {
+                        case 'CHECKLIST_ID':
+                            divcklst.id = 'checklist_id';
+                            divcklst.textContent = key + ': ' + records[row][key];
+                            sectionChecklist.appendChild(divcklst);
+                            break;
+                        case 'STANDARD':
+                            divcklst.id = 'standard';
+                            divcklst.textContent = key + ': ' + records[row][key];
+                            sectionChecklist.appendChild(divcklst);
+                            // Add sibling br to divcklst
+                            const br = document.createElement('br');
+                            divChecklistRow.appendChild(br);
+                            break;
+                        case 'QUESTION':
+                            divcklst.id = 'question';
+                            divcklst.textContent = key + ': ' + records[row][key];
+                            sectionChecklist.appendChild(divcklst);
+                            break;
+                        case 'OBSERVATION':
+                            divcklst.id = 'observation';
+                            divcklst.textContent = key + ': ' + records[row][key];
+                            sectionChecklist.appendChild(divcklst);
+                            break;
+                        case 'REFERENCE':
+                            divcklst.id = 'reference';
+                            divcklst.textContent = key + ': ' + records[row][key];
+                            sectionChecklist.appendChild(divcklst);
+                            
+                            break;
+                        default:
+                            // break;
+                            continue;
+                            
+                        }
+
+                        console.log(divcklst);
+                        divcklst.textContent = key + ': ' + records[row][key];
+                        divChecklistRow.appendChild(divcklst);
+                    }
             }
         }
-        table.appendChild(thead);
-
-        table.appendChild(tbody);
-        sectionChecklist.appendChild(table);
     });
+    sectionChecklist.appendChild(divChecklistRow);
     main.appendChild(sectionChecklist);
 
 

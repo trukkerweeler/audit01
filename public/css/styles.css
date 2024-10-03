@@ -397,7 +397,7 @@ h1 {
     max-height: 30px;
 }
 
-.details {
+.checklist-row {
     /* display: grid; */
     /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; */
     /* margin: 2rem auto; */
@@ -406,6 +406,86 @@ h1 {
     box-shadow: var(--shadow);
     transition: var(--transition); 
     background-color: var(--secondary-color);
+}
+
+.checklist {
+    display: block;
+    /* grid-template-columns: 1fr 1fr 1fr 1fr 2fr; */
+    /* margin: 2rem auto; */
+    /* padding: 1rem; */
+    /* border-radius: var(--border-radius); */
+    /* box-shadow: var(--shadow); */
+    /* transition: var(--transition);  */
+    /* background-color: var(--secondary-color); */
+}
+
+.checklist h3 {
+    grid-column: span 5;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: inline-block;
+}
+#standard {
+    grid-column: span 1;
+    grid-row-start: 2;
+    grid-column-start: 2;
+    border: #000 1px solid;
+    text-align: left;
+    font-weight: 600;
+    font-size: small;
+    padding-left: 5px;
+}
+#checklist_id {
+    grid-column: span 1;
+    grid-row-start: 2;
+    grid-column-start: 1;
+    border: #000 1px solid;
+    text-align: left;
+    font-weight: 600;
+    font-size: small;
+    padding-left: 5px;
+}
+
+#reference {
+    grid-column: span 1;
+    grid-row-start: 2;
+    grid-column-start: 3;
+    border: #000 1px solid;
+    text-align: left;
+    font-weight: 600;
+    font-size: small;
+    padding-left: 5px;
+}
+
+#observation {
+    grid-column: span 1/6;
+    grid-row-start: 4;
+    grid-column-start: 1;
+    border: #000 1px solid;
+    text-align: left;
+    font-weight: 600;
+    font-size: small;
+    padding-left: 5px;
+}
+
+#question {
+    grid-column: span 1/6;
+    grid-row-start: 3;
+    grid-column-start: 1;
+    border: #000 1px solid;
+    text-align: left;
+    font-weight: 600;
+    font-size: small;
+    padding-left: 5px;
 }
 
 
