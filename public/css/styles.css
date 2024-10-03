@@ -397,12 +397,14 @@ h1 {
     max-height: 30px;
 }
 
-.checklist-row {
-    /* display: grid; */
-    /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; */
-    /* margin: 2rem auto; */
+.rowdiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+    margin-top: 0;
+    margin-bottom: 0;
     padding: 1rem;
-    /* border-radius: var(--border-radius); */
+    padding-top: 0;
+    border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     transition: var(--transition); 
     background-color: var(--secondary-color);
@@ -410,13 +412,6 @@ h1 {
 
 .checklist {
     display: block;
-    /* grid-template-columns: 1fr 1fr 1fr 1fr 2fr; */
-    /* margin: 2rem auto; */
-    /* padding: 1rem; */
-    /* border-radius: var(--border-radius); */
-    /* box-shadow: var(--shadow); */
-    /* transition: var(--transition);  */
-    /* background-color: var(--secondary-color); */
 }
 
 .checklist h3 {
@@ -438,7 +433,7 @@ h1 {
     grid-column: span 1;
     grid-row-start: 2;
     grid-column-start: 2;
-    border: #000 1px solid;
+    /* border: #000 1px solid; */
     text-align: left;
     font-weight: 600;
     font-size: small;
@@ -448,7 +443,7 @@ h1 {
     grid-column: span 1;
     grid-row-start: 2;
     grid-column-start: 1;
-    border: #000 1px solid;
+    /* border: #000 1px solid; */
     text-align: left;
     font-weight: 600;
     font-size: small;
@@ -459,7 +454,7 @@ h1 {
     grid-column: span 1;
     grid-row-start: 2;
     grid-column-start: 3;
-    border: #000 1px solid;
+    /* border: #000 1px solid; */
     text-align: left;
     font-weight: 600;
     font-size: small;
@@ -475,6 +470,7 @@ h1 {
     font-weight: 600;
     font-size: small;
     padding-left: 5px;
+    height: 2rem;
 }
 
 #question {
@@ -486,6 +482,22 @@ h1 {
     font-weight: 600;
     font-size: small;
     padding-left: 5px;
+}
+
+.details p {
+margin-bottom: 3px;
+    
+}
+
+.chkdet {
+    margin-bottom: 0;
+    border: none;
+}
+
+#btnAddQust {
+    /* float in parent */
+    float: right;
+    /* justify-self: end; */
 }
 
 

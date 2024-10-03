@@ -31,7 +31,7 @@ fetch(url, { method: 'GET' })
     h2.textContent = 'Details';
     section.appendChild(h2);
 
-    const fieldList = ['AUDIT_ID', 'AUDIT_MANAGER_ID', 'STANDARD', 'SUBJECT', 'SCHEDULED_DATE', 'LEAD_AUDITOR', 'AUDITEE1', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
+    const fieldList = ['AUDIT_ID', 'AUDIT_MANAGER_ID', 'STANDARD', 'SUBJECT', 'SCHEDULED_DATE', 'LEAD_AUDITOR', 'AUDITEE1'];
     for (const key in record[0]) {
         if (!fieldList.includes(key)) {
             continue;
@@ -54,31 +54,30 @@ fetch(url, { method: 'GET' })
     h3.textContent = 'Checklist';
     sectionChecklist.appendChild(h3);
     main.appendChild(sectionChecklist);
-
     
     // Checklist button
     const btnChecklist = document.createElement('button');
-    btnChecklist.textContent = 'Add Checklist';
+    btnChecklist.textContent = 'Add Question';
     btnChecklist.classList.add('btn');
     btnChecklist.classList.add('btn-primary');
+    btnChecklist.id = 'btnAddQust';
     sectionChecklist.appendChild(btnChecklist);
-    btnChecklist.addEventListener('click', () => {
-        window.location.href = 'checklist.html?id=' + id;
-    });
-
-    // Checklist row div
-    const divChecklistRow = document.createElement('div');
-    divChecklistRow.classList.add('checklist-row');
+    // btnChecklist.addEventListener('click', () => {
+    //     window.location.href = 'checklist.html?id=' + id;
+    // });
 
     fetch(managerUrl + id, { method: 'GET' })
     .then(response => response.json())
     .then(records => {
-        console.log(records);    
+        // console.log(records);    
         
         let checklistFields = ['CHECKLIST_ID', 'STANDARD', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
         
         for (const row in records) {
-            console.log(records[row]);
+            // console.log(records[row]);
+            // for every row we want a div
+            const rowdiv = document.createElement('div');
+            rowdiv.classList.add('rowdiv');
             
             for (const key in records[row]) {
                 // console.log(key);
@@ -88,33 +87,45 @@ fetch(url, { method: 'GET' })
                     // divcklst.classList.add('checklist');
                     switch (key) {
                         case 'CHECKLIST_ID':
-                            divcklst.id = 'checklist_id';
-                            divcklst.textContent = key + ': ' + records[row][key];
-                            sectionChecklist.appendChild(divcklst);
+                            const pcklst = document.createElement('p');
+                            pcklst.id = 'checklist_id';
+                            pcklst.classList.add('chkdet');
+                            pcklst.textContent = "Checklist Id: " + records[row][key];
+                            rowdiv.appendChild(pcklst);
                             break;
                         case 'STANDARD':
-                            divcklst.id = 'standard';
-                            divcklst.textContent = key + ': ' + records[row][key];
-                            sectionChecklist.appendChild(divcklst);
-                            // Add sibling br to divcklst
-                            const br = document.createElement('br');
-                            divChecklistRow.appendChild(br);
+                            const scklst = document.createElement('p');
+                            scklst.id = 'standard';
+                            scklst.classList.add('chkdet');
+                            scklst.textContent = "Standard: " + records[row][key];
+                            rowdiv.appendChild(scklst);
                             break;
                         case 'QUESTION':
-                            divcklst.id = 'question';
-                            divcklst.textContent = key + ': ' + records[row][key];
-                            sectionChecklist.appendChild(divcklst);
+                            const qcklst = document.createElement('p');
+                            qcklst.id = 'question';
+                            qcklst.textContent = key + ': ' + records[row][key];
+                            rowdiv.appendChild(qcklst);
                             break;
                         case 'OBSERVATION':
-                            divcklst.id = 'observation';
-                            divcklst.textContent = key + ': ' + records[row][key];
-                            sectionChecklist.appendChild(divcklst);
+                            const ocklst = document.createElement('p');
+                            ocklst.id = 'observation';
+                            // Set to zls if null
+                            if (records[row][key] == null) {
+                                records[row][key] = '';
+                            }
+                            ocklst.textContent = key + ': ' + records[row][key];
+                            rowdiv.appendChild(ocklst);
                             break;
                         case 'REFERENCE':
-                            divcklst.id = 'reference';
-                            divcklst.textContent = key + ': ' + records[row][key];
-                            sectionChecklist.appendChild(divcklst);
-                            
+                            const rcklst = document.createElement('p');
+                            rcklst.id = 'reference';
+                            rcklst.classList.add('chkdet');
+                            // Set to zls if null
+                            if (records[row][key] == null) {
+                                records[row][key] = '';
+                            }
+                            rcklst.textContent = "Ref." + ': ' + records[row][key];
+                            rowdiv.appendChild(rcklst);
                             break;
                         default:
                             // break;
@@ -122,15 +133,24 @@ fetch(url, { method: 'GET' })
                             
                         }
 
-                        console.log(divcklst);
+                        // console.log(divcklst);
                         divcklst.textContent = key + ': ' + records[row][key];
-                        divChecklistRow.appendChild(divcklst);
+                        // divChecklistRow.appendChild(divcklst);
                     }
             }
+            sectionChecklist.appendChild(rowdiv);
         }
     });
-    sectionChecklist.appendChild(divChecklistRow);
+    // sectionChecklist.appendChild(divChecklistRow);
     main.appendChild(sectionChecklist);
-
-
-});                                                                                                                                                               
+    
+    const btnAddQust = document.getElementById('btnAddQust');
+    btnAddQust.addEventListener('click', async (e) => {
+        // prevent default
+        e.preventDefault();
+        // get the dialog from the html
+        const addQdialog = document.querySelector('#addquestion');
+        // show the dialog
+        addQdialog.showModal();
+    });
+});
