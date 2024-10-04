@@ -144,13 +144,52 @@ fetch(url, { method: 'GET' })
     // sectionChecklist.appendChild(divChecklistRow);
     main.appendChild(sectionChecklist);
     
+    
     const btnAddQust = document.getElementById('btnAddQust');
     btnAddQust.addEventListener('click', async (e) => {
         // prevent default
         e.preventDefault();
         // get the dialog from the html
-        const addQdialog = document.querySelector('#addquestion');
+        const addQdialog = document.querySelector("#addquestion");
         // show the dialog
         addQdialog.showModal();
+    });
+
+    // listen ofr the savenewquestion button
+    const btnSaveNewQuestion = document.getElementById('savenewquestion');
+    btnSaveNewQuestion.addEventListener('click', async (e) => {
+        // prevent default
+        e.preventDefault();
+        // get the dialog from the html
+        const addQdialog = document.querySelector("#addquestion");
+        // get the values from the form
+        const newQuestion = document.getElementById('newquestion').value;
+        const newStandard = document.getElementById('newstandard').value;
+        const newReference = document.getElementById('newreference').value;
+        // console.log(newQuestion, newObservation, newReference);
+        // create the new record
+        const newRecord = {
+            STANDARD: record[0].STANDARD,
+            QUESTION: newQuestion,
+            REFERENCE: newReference,
+        };
+        console.log(newRecord);
+
+        // // post the new record
+        // fetch(checklistUrl, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(newRecord)
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     // console.log(data);
+        //     // close the dialog
+        //     addQdialog.close();
+        //     // reload the page
+        //     window.location.reload();
+        // });
     });
 });

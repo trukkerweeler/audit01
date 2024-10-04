@@ -14,21 +14,19 @@
 <body>
     <header id="header"></header>
     <h1>Audit Manager</h1>
-    <main id="main">
-        <!-- Add data entry dialog form for checklist questions -->
-        <dialog id="addquestion">
-            <form id="addQuestionForm" class="form">
-                <h2>Add Question</h2>
-                <label for="standard">Standard</label>
-                <input type="text" id="newstandard" name="standard" required>
-                <label for="reference">Reference</label>
-                <input type="text" id="newreference" name="reference" required>
-                <label for="question">Question:</label>
-                <input type="text" id="newquestion" name="question" required>
-                <button type="submit" id="savenewquestion">Save New Question</button>
-            </form>
-        </dialog>
-    </main>
+    <main id="main"></main>
+     <dialog id="addquestion" class="editDialog">
+        <form id="addQuestionForm" class="form">
+            <h2 class="formh2">Add Question</h2>
+            <label for="standard">Standard</label>
+            <input type="text" id="newstandard" name="standard" required>
+            <label for="reference">Reference</label>
+            <input type="text" id="newreference" name="reference" required>
+            <label for="question">Question:</label>
+            <textarea type="textarea" id="newquestion" name="question" rows="4" cols="50" wrap="soft" required></textarea>
+            <button type="submit" id="savenewquestion">Save New Question</button>
+        </form>
+    </dialog>
     <footer id="footer"></footer>    
 </body>
 <script type="module" src="/js/manager.js"></script>
