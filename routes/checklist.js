@@ -26,10 +26,10 @@ router.get('/', (req, res) => {
         // console.log('Connected to DB');
 
         const query = `select * from PROCESS_AUDIT order by AUDIT_ID desc`;
-        
+        console.log(query);
         connection.query(query, (err, rows, fields) => {
             if (err) {
-                console.log('Failed to query for corrective actions: ' + err);
+                console.log('Failed to query for process audit: ' + err);
                 res.sendStatus(500);
                 return;
             }
@@ -39,8 +39,6 @@ router.get('/', (req, res) => {
         connection.end();
         });
     
-
-    // res.send('Hello Corrective!');
     } catch (err) {
         console.log('Error connecting to Db');
         return;
@@ -48,7 +46,7 @@ router.get('/', (req, res) => {
 
 });
 
-// Get the next ID for a new record
+// Get the next Audit Manager ID for a new record
 router.get('/nextId', (req, res) => {
     try {
         const connection = mysql.createConnection({
@@ -65,7 +63,7 @@ router.get('/nextId', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = 'SELECT CURRENT_ID FROM SYSTEM_IDS where TABLE_NAME = "PROCESS_AUDIT"';
+        const query = 'SELECT AUDIT_MANAGER_ID FROM SYSTEM_IDS where TABLE_NAME = "AUDIT_MANAGER"';
         connection.query(query, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for current id: ' + err);
@@ -81,16 +79,63 @@ router.get('/nextId', (req, res) => {
         connection.end();
         });
     } catch (err) {
-        console.log('Error connecting to Db 94');
+        console.log('Error connecting to Db 84');
         return;
     }
+});
+
+// Get the next Audit for a new record
+router.get('/nextChecklist/:id', (req, res) => {
+    amparams = req.params.id;
+    console.log(amparams);
+    try {
+        const connection = mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            port: 3306,
+            database: 'quality'
+        });
+        connection.connect(function(err) {
+            if (err) {
+                console.error('Error connecting: ' + err.stack);
+                return;
+            }
+        console.log('Connected to DB104');
+
+        const query = `select CHECKLIST_ID from AUDT_CHKL_QUST where AUDIT_MANAGER_ID = '${amparams}' order by CHECKLIST_ID desc limit 1`
+        console.log(query);
+        connection.query(query, (err, rows, fields) => {
+            if (err) {
+                console.log('Failed to query for current id: ' + err);
+                res.sendStatus(500);
+                return;
+            }
+            if (rows.length === 0) {
+                console.log('No rows returned');
+                res.json('0000001');
+                return;
+            }
+            const nextId = parseInt(rows[0].CHECKLIST_ID) + 1;
+            let nextChecklistId = nextId.toString().padStart(7, '0');
+
+            res.json(nextChecklistId);
+        });    
+
+        connection.end();
+        });
+    } catch (err) {
+        console.log('Error connecting to Db 122');
+        return;
+    }
+    
 });
 
 // ==================================================
 // Create a record
 router.post('/', (req, res) => {
     // console.log('102');
-    // console.log(req.body);
+    console.log(req.body);
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -106,32 +151,20 @@ router.post('/', (req, res) => {
             }
         // console.log('Connected to DB');
              
-        const query = `insert into PROCESS_AUDIT (AUDIT_MANAGER_ID
-            , AUDIT_ID
-            , STANDARD
-            , SUBJECT
-            , SCHEDULED_DATE
-            , LEAD_AUDITOR
-            , AUDITEE1
-            , CREATE_BY
-            , CREATE_DATE
+        const query = `insert into AUDT_CHKL_QUST (AUDIT_MANAGER_ID
+            , CHECKLIST_ID
+            , QUESTION
             ) values (
                 '${req.body.AUDIT_MANAGER_ID}'
-                , '${req.body.AUDIT_ID}'
-                , '${req.body.STANDARD}'
-                , '${req.body.SUBJECT}'
-                , '${req.body.SCHEDULED_DATE}'
-                , '${req.body.LEAD_AUDITOR}'
-                , '${req.body.AUDITEE1}'
-                , '${req.body.CREATE_BY}'
-                , '${req.body.CREATE_DATE}'
+                , '${req.body.CHECKLIST_ID}'                                                                                                                                                                                                    
+                , '${req.body.QUESTION}'
             )`;
         
-        // console.log(query);
+        console.log(query);
 
         connection.query(query, (err, rows, fields) => {
             if (err) {
-                console.log('Failed to query for PROCESS AUDIT insert: ' + err);
+                console.log('Failed to query for CHECKLIST insert: ' + err);
                 res.sendStatus(500);
                 return;
             }
@@ -151,7 +184,7 @@ router.post('/', (req, res) => {
         //     }
         // });
 
-        const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_ID}' WHERE TABLE_NAME = 'PROCESS_AUDIT'`;
+        const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_MANAGER_ID}' WHERE TABLE_NAME = 'AUDIT_MANAGER'`;
         connection.query(updateQuery, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for system id update: ' + err);
@@ -159,6 +192,24 @@ router.post('/', (req, res) => {
                 return;
             }
         });
+
+        // update the REFERENCE table
+        const queryRef = `insert into AUDT_CHKL_RFNC (AUDIT_MANAGER_ID
+            , CHECKLIST_ID
+            , REFERENCE
+            ) values (
+                '${req.body.AUDIT_MANAGER_ID}'
+                , '${req.body.CHECKLIST_ID}'                                                                                                                                                                                                    
+                , '${req.body.REFERENCE}'
+            )`;
+            connection.query(queryRef, (err, rows, fields) => {
+                if (err) {
+                    console.log('Failed to query for REFERENCE insert: ' + err);
+                    res.sendStatus(500);
+                    return;
+                }
+                // res.sendStatus(200);
+            });
 
         connection.end();
         });
@@ -189,13 +240,19 @@ router.get('/:id', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDIT_MANAGER am 
-        left join AUDT_CHKL_QUST acq on am.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID
-        left join AUDT_CHKL_OBSN aco on am.AUDIT_MANAGER_ID = aco.AUDIT_MANAGER_ID
-        left join AUDT_CHKL_RFNC acr on am.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID
-        where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
+        // const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDIT_MANAGER am 
+        // left join AUDT_CHKL_QUST acq on am.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID 
+        // left join AUDT_CHKL_OBSN aco on am.AUDIT_MANAGER_ID = aco.AUDIT_MANAGER_ID
+        // left join AUDT_CHKL_RFNC acr on am.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID
+        // where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
-        // console.log(query);
+        const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDT_CHKL_QUST acq 
+        left join AUDT_CHKL_OBSN aco on acq.CHECKLIST_ID = aco.CHECKLIST_ID
+        left join AUDT_CHKL_RFNC acr on acq.CHECKLIST_ID = acr.CHECKLIST_ID
+        join AUDIT_MANAGER am on acq.AUDIT_MANAGER_ID = am.AUDIT_MANAGER_ID
+        where acq.AUDIT_MANAGER_ID = '${req.params.id}'`;
+
+        console.log(query);
 
         connection.query(query, (err, rows, fields) => {
             if (err) {

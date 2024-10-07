@@ -48,8 +48,46 @@ router.get('/', (req, res) => {
 
 });
 
-// Get the next ID for a new record
-router.get('/nextId', (req, res) => {
+// Get the next AuditId for a new record
+router.get('/nextAuditId', (req, res) => {
+    try {
+        const connection = mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            port: 3306,
+            database: 'quality'
+        });
+        connection.connect(function(err) {
+            if (err) {
+                console.error('Error connecting: ' + err.stack);
+                return;
+            }
+        // console.log('Connected to DB');
+
+        const query = 'SELECT CURRENT_ID FROM SYSTEM_IDS where TABLE_NAME = "AUDIT"';
+        connection.query(query, (err, rows, fields) => {
+            if (err) {
+                console.log('Failed to query for current id: ' + err);
+                res.sendStatus(500);
+                return;
+            }
+            const nextId = parseInt(rows[0].CURRENT_ID) + 1;
+            let dbNextId = nextId.toString().padStart(7, '0');
+
+            res.json(dbNextId);
+        });    
+
+        connection.end();
+        });
+    } catch (err) {
+        console.log('Error connecting to Db 94');
+        return;
+    }
+});
+
+// Get the next ManagerID for a new record
+router.get('/nextManagerId', (req, res) => {
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -76,7 +114,7 @@ router.get('/nextId', (req, res) => {
             let dbNextId = nextId.toString().padStart(7, '0');
 
             res.json(dbNextId);
-        });    
+        });
 
         connection.end();
         });
@@ -155,6 +193,15 @@ router.post('/', (req, res) => {
         connection.query(updateQuery, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for system id update: ' + err);
+                res.sendStatus(500);
+                return;
+            }
+        });
+                
+        const auditIdQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_ID}' WHERE TABLE_NAME = 'AUDIT'`;
+        connection.query(auditIdQuery, (err, rows, fields) => {
+            if (err) {
+                console.log('Failed to query for audit id update: ' + err);
                 res.sendStatus(500);
                 return;
             }

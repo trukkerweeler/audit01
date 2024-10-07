@@ -431,7 +431,7 @@ h1 {
 }
 #standard {
     grid-column: span 1;
-    grid-row-start: 2;
+    /* grid-row-start: 2; */
     grid-column-start: 2;
     /* border: #000 1px solid; */
     text-align: left;
@@ -453,7 +453,7 @@ h1 {
 #reference {
     grid-column: span 1;
     grid-row-start: 2;
-    grid-column-start: 3;
+    /* grid-column-start: 3; */
     /* border: #000 1px solid; */
     text-align: left;
     font-weight: 600;

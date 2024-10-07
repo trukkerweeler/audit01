@@ -44,3 +44,12 @@ export function getDateTime() {
   
     return `${year}-${month}-${dayOfMonth} ${hours}:${minutes}:${seconds}`;
   }
+
+  export function getData() {
+    const url = 'http://localhost:3008/manager/';
+    fetch(url, { method: 'GET' })
+    .then(response => response.json())
+    .then(record => {
+        return record;
+    });
+  }

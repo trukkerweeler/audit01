@@ -10,7 +10,13 @@ const form = document.querySelector('form');
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const data = new FormData(form);
-    const nextId = await fetch(url + '/nextId', { method: 'GET' })
+    const nextAuditId = await fetch(url + '/nextAuditId', { method: 'GET' })
+    .then(response => response.json())
+    .then (data => {
+        JSON.stringify(data);
+        return data;
+    })
+    const nextManagerId = await fetch(url + '/nextManagerId', { method: 'GET' })
     .then(response => response.json())
     .then (data => {
         JSON.stringify(data);
@@ -23,7 +29,8 @@ form.addEventListener('submit', async (event) => {
     myRequestDate = myRequestDate.toISOString().slice(0, 10);
     
     const dataJson = {
-        AUDIT_MANAGER_ID: nextId,
+        AUDIT_MANAGER_ID: nextManagerId,
+        AUDIT_ID: nextAuditId,
         CREATE_DATE: myRequestDate,
         CREATE_BY: user,
     };

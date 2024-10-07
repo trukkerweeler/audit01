@@ -37,12 +37,19 @@ fetch(url, { method: 'GET' })
             continue;
         }
         const p = document.createElement('p');
+        p.textContent = key + ': ' + record[0][key];
+
         // if the last 4 =='DATE' then format the date
         if (key.slice(-4) == 'DATE') {
             p.textContent = key + ': ' + new Date(record[0][key]).toLocaleDateString();
-        } else {
+        } 
+
+        if (key == 'AUDIT_ID') {
+            // p.innerHTML = key + ': <a href="http://localhost:3008/manager.html?id=' + record[0][key] + '">' + record[0][key] + '</a>';
             p.textContent = key + ': ' + record[0][key];
+            p.setAttribute('id', 'audit_id');
         }
+
         section.appendChild(p);
     }   
     main.appendChild(section);
@@ -57,7 +64,7 @@ fetch(url, { method: 'GET' })
     
     // Checklist button
     const btnChecklist = document.createElement('button');
-    btnChecklist.textContent = 'Add Question';
+    btnChecklist.textContent = 'Add Checklist';
     btnChecklist.classList.add('btn');
     btnChecklist.classList.add('btn-primary');
     btnChecklist.id = 'btnAddQust';
@@ -66,12 +73,12 @@ fetch(url, { method: 'GET' })
     //     window.location.href = 'checklist.html?id=' + id;
     // });
 
-    fetch(managerUrl + id, { method: 'GET' })
+    fetch(checklistUrl + id, { method: 'GET' })
     .then(response => response.json())
     .then(records => {
-        // console.log(records);    
+        console.log(records);    
         
-        let checklistFields = ['CHECKLIST_ID', 'STANDARD', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
+        let checklistFields = ['CHECKLIST_ID', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
         
         for (const row in records) {
             // console.log(records[row]);
@@ -160,36 +167,50 @@ fetch(url, { method: 'GET' })
     btnSaveNewQuestion.addEventListener('click', async (e) => {
         // prevent default
         e.preventDefault();
+        // get the AUDIT_MANAGER_ID from the url parameter
+        const auditManagerId = urlParams.get('id');
+        // get the checklist id
+        // console.log(checklistUrl + "nextChecklist/" + auditManagerId);
+        const checklistId = fetch(checklistUrl + "nextChecklist/" + auditManagerId, { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+            // convert data to string and return
+            // return JSON.stringify(data);
+            return data;
+        });
+
+        
         // get the dialog from the html
         const addQdialog = document.querySelector("#addquestion");
         // get the values from the form
         const newQuestion = document.getElementById('newquestion').value;
-        const newStandard = document.getElementById('newstandard').value;
+        // const newStandard = document.getElementById('newstandard').value;
         const newReference = document.getElementById('newreference').value;
         // console.log(newQuestion, newObservation, newReference);
         // create the new record
         const newRecord = {
-            STANDARD: record[0].STANDARD,
+            AUDIT_MANAGER_ID: auditManagerId,
+            CHECKLIST_ID : (await checklistId).toString().padStart(7, '0'),
             QUESTION: newQuestion,
             REFERENCE: newReference,
         };
         console.log(newRecord);
 
-        // // post the new record
-        // fetch(checklistUrl, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(newRecord)
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // console.log(data);
-        //     // close the dialog
-        //     addQdialog.close();
-        //     // reload the page
-        //     window.location.reload();
-        // });
+        // post the new record
+        fetch(checklistUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newRecord)
+        })
+        .then(response => response.json())
+        .then(data => {
+            // console.log(data);
+            // close the dialog
+            addQdialog.close();
+            // reload the page
+            // window.location.reload();
+        });
     });
 });
