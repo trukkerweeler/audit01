@@ -43,6 +43,9 @@ form.addEventListener('submit', async (event) => {
             case 'AUDITEE':
                 dataJson[field] = data.get(field).toUpperCase();
                 break;
+            case 'AUDITEE1':
+                dataJson[field] = data.get(field).toUpperCase();
+                break;
             case 'SUBJECT':
                 dataJson[field] = data.get(field).toUpperCase();
                 break;

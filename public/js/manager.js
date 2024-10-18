@@ -76,7 +76,7 @@ fetch(url, { method: 'GET' })
     fetch(checklistUrl + id, { method: 'GET' })
     .then(response => response.json())
     .then(records => {
-        console.log(records);    
+        // console.log(records);    
         
         let checklistFields = ['CHECKLIST_ID', 'QUESTION', 'OBSERVATION', 'REFERENCE'];
         
@@ -148,7 +148,6 @@ fetch(url, { method: 'GET' })
             sectionChecklist.appendChild(rowdiv);
         }
     });
-    // sectionChecklist.appendChild(divChecklistRow);
     main.appendChild(sectionChecklist);
     
     
@@ -194,7 +193,7 @@ fetch(url, { method: 'GET' })
             QUESTION: newQuestion,
             REFERENCE: newReference,
         };
-        console.log(newRecord);
+        // console.log(newRecord);
 
         // post the new record
         fetch(checklistUrl, {
@@ -210,7 +209,7 @@ fetch(url, { method: 'GET' })
             // close the dialog
             addQdialog.close();
             // reload the page
-            // window.location.reload();
+            window.location.reload();
         });
     });
 });

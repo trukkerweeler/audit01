@@ -37,7 +37,7 @@ function getRecords () {
                             td.textContent = record[key].slice(0,10);
                         } else {
                             if (key == 'AUDIT_MANAGER_ID') {
-                                td.innerHTML = `<a href="http://localhost:3008/schedule.html?id=${record[key]}">${record[key]}</a>`;
+                                td.innerHTML = `<a href="http://localhost:3008/manager.html?id=${record[key]}">${record[key]}</a>`;
                             } else {
                                 td.textContent = record[key];
                             }

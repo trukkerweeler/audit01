@@ -150,6 +150,7 @@ router.post('/', (req, res) => {
                 return;
             }
         // console.log('Connected to DB');
+        formattedQuestion = req.body.QUESTION.replace(/'/g, "\\'");
              
         const query = `insert into AUDT_CHKL_QUST (AUDIT_MANAGER_ID
             , CHECKLIST_ID
@@ -157,7 +158,7 @@ router.post('/', (req, res) => {
             ) values (
                 '${req.body.AUDIT_MANAGER_ID}'
                 , '${req.body.CHECKLIST_ID}'                                                                                                                                                                                                    
-                , '${req.body.QUESTION}'
+                , '${formattedQuestion}'
             )`;
         
         console.log(query);
@@ -170,19 +171,6 @@ router.post('/', (req, res) => {
             }
             res.json(rows);
         });
-        
-        // // escape the apostrophe
-        // let inputText = req.body.INPUT_TEXT.replace(/'/g, "\\'");
-        // // escape the backslash
-        // inputText = req.body.INPUT_TEXT.replace(/\\/g, "\\\\");
-        // const insertQuery = `insert into PPL_INPT_TEXT values ('${req.body.INPUT_ID}', '${inputText}')`;
-        // connection.query(insertQuery, (err, rows, fields) => {
-        //     if (err) {
-        //         console.log('Failed to query for PPL_INPT_TEXT insert: ' + err);
-        //         res.sendStatus(500);
-        //         return;
-        //     }
-        // });
 
         const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_MANAGER_ID}' WHERE TABLE_NAME = 'AUDIT_MANAGER'`;
         connection.query(updateQuery, (err, rows, fields) => {
@@ -247,12 +235,12 @@ router.get('/:id', (req, res) => {
         // where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
         const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDT_CHKL_QUST acq 
-        left join AUDT_CHKL_OBSN aco on acq.CHECKLIST_ID = aco.CHECKLIST_ID
-        left join AUDT_CHKL_RFNC acr on acq.CHECKLIST_ID = acr.CHECKLIST_ID
+        left join AUDT_CHKL_OBSN aco on acq.CHECKLIST_ID = aco.CHECKLIST_ID and aco.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID
+        left join AUDT_CHKL_RFNC acr on acq.CHECKLIST_ID = acr.CHECKLIST_ID and acr.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID
         join AUDIT_MANAGER am on acq.AUDIT_MANAGER_ID = am.AUDIT_MANAGER_ID
         where acq.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
-        console.log(query);
+        // console.log(query);
 
         connection.query(query, (err, rows, fields) => {
             if (err) {
