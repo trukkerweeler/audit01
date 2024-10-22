@@ -104,7 +104,7 @@ router.get('/nextChecklist/:id', (req, res) => {
         console.log('Connected to DB104');
 
         const query = `select CHECKLIST_ID from AUDT_CHKL_QUST where AUDIT_MANAGER_ID = '${amparams}' order by CHECKLIST_ID desc limit 1`
-        console.log(query);
+        // console.log(query);
         connection.query(query, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for current id: ' + err);

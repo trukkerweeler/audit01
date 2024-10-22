@@ -1,6 +1,6 @@
 import { loadHeaderFooter } from './utils.mjs';
 loadHeaderFooter();
-const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATE_DATE'];
+const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION','SCORE', 'RESULT', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATE_DATE'];
 
 const url = 'http://localhost:3008/schedule';
 
