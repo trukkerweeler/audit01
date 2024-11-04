@@ -178,6 +178,16 @@ fetch(url, { method: 'GET' })
             return data;
         });
 
+        // if reference is blank pull first line of question if starts with AS9100
+        if (document.getElementById('newreference').value == '') {
+            const newQuestion = document.getElementById('newquestion').value;
+            if (newQuestion.startsWith('AS9100')) {
+                document.getElementById('newreference').value = newQuestion.split('\n')[0];
+                // set the new question to the rest of the question
+                document.getElementById('newquestion').value = newQuestion.split('\n').slice(1).join('\n');
+            }
+        }
+
         
         // get the dialog from the html
         const addQdialog = document.querySelector("#addquestion");
