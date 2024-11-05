@@ -484,6 +484,11 @@ h1 {
     padding-left: 5px;
 }
 
+.details {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .details p {
 margin-bottom: 3px;
     
@@ -546,6 +551,14 @@ dialog form {
     height: 125px;
 }
 
+#btnEditDetail {
+    float: right;
+}
+.detailheader {
+    grid-column: span 2;
+}
+
+
 
 @media print {
     form{
@@ -554,7 +567,7 @@ dialog form {
     .entryform {
         display: none;
     }
-    #main-nav {
+    #main-nav, #btnEditDetail, #btnAddQust, #btnaddaudit{
         display: none;
     }
     #doit {

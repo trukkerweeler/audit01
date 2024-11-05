@@ -215,35 +215,16 @@ router.get('/:id', (req, res) => {
     }
 });
 
+// ==================================================
+//  PUT audit manager record
 router.put('/:id', (req, res) => {
-    // console.log("Params: " + req.params.id);
-    // console.log(req.body);
+    console.log(req.body);
+    // console.log(req.params.id);
     let mytable = '';
     let appended = '';
-    const myfield = Object.keys (req.body) [2]
-    // console.log(myfield);
-    switch (myfield) {
-        case 'RESPONSE_TEXT':
-            // console.log('Response');
-            mytable = 'PPL_INPT_RSPN';
-            // appended = req.body.RESPONSE_TEXT.replace(/'/g, "\\'");
-            appended = req.body.RESPONSE_TEXT;
-            break;
-        case 'FOLLOWUP_TEXT':
-            // console.log('Followup');
-            mytable = 'PPL_INPT_FLUP';
-            appended = req.body.FOLLOWUP_TEXT
-            break;
-        case 'INPUT_TEXT':
-            // console.log('Input');
-            mytable = 'PPL_INPT_TEXT';
-            appended = req.body.INPUT_TEXT
-            break;
-        default:
-            console.log('No match');
-    }
-    // Replace the br with a newline
-    appended = appended.replace(/<br>/g, "\n");
+    const myfield = Object.keys (req.body) [1]
+    // let amid = req.params.id;
+    
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -257,15 +238,12 @@ router.put('/:id', (req, res) => {
                 console.error('Error connecting: ' + err.stack);
                 return;
             }
-        // console.log('Connected to DB');
-        // console.log(req.body);
-        const query = `REPLACE INTO ${mytable} SET 
-        INPUT_ID = '${req.params.id}',
-        ${myfield} = '${appended}'`;
+        const query = `UPDATE AUDIT_MANAGER SET STANDARD = '${req.body.STANDARD}', SUBJECT = '${req.body.SUBJECT}', SCHEDULED_DATE = '${req.body.SCHEDULED_DATE}', LEAD_AUDITOR = '${req.body.LEAD_AUDITOR}', AUDITEE1 = '${req.body.AUDITEE1}' WHERE AUDIT_MANAGER_ID = '${req.params.id}'`;
         // console.log(query);
+
         connection.query(query, (err, rows, fields) => {
             if (err) {
-                console.log('Failed to query for input : ' + err);
+                console.log('Failed to query for corrective actions : ' + err);
                 res.sendStatus(500);
                 return;
             }
@@ -275,7 +253,7 @@ router.put('/:id', (req, res) => {
         connection.end();
         });
     } catch (err) {
-        console.log('Error connecting to Db 83');
+        console.log('Error connecting to Db 253');
         return;
     }
 
