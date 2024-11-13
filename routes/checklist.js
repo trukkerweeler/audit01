@@ -209,6 +209,58 @@ router.post('/', (req, res) => {
 
 });
 
+// create observation record
+router.post('/obsn', (req, res) => {
+    // console.log('102');
+    console.log(req.body);
+    try {
+        const connection = mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            port: 3306,
+            database: 'quality'
+        });
+        connection.connect(function(err) {
+            if (err) {
+                console.error('Error connecting: ' + err.stack);
+                return;
+            }
+        // console.log('Connected to DB');
+        formattedObservation = req.body.OBSERVATION.replace(/'/g, "\\'");
+        // replace backslash with double backslash
+        formattedObservation = formattedObservation.replace(/\\/g, "\\\\");
+             
+        const query = `insert into AUDT_CHKL_OBSN (AUDIT_MANAGER_ID
+            , CHECKLIST_ID
+            , OBSERVATION
+            ) values (
+                '${req.body.AUDIT_MANAGER_ID}'
+                , '${req.body.CHECKLIST_ID}'                                                                                                                                                                                                    
+                , '${formattedObservation}'
+            )`;
+        
+        // console.log(query);
+
+        connection.query(query, (err, rows, fields) => {
+            if (err) {
+                console.log('Failed to query for OBSERVATION insert: ' + err);
+                res.sendStatus(500);
+                return;
+            }
+            res.json(rows);
+        });
+
+        connection.end();
+        });
+
+    } catch (err) {
+        console.log('Error connecting to Db 170');
+        return;
+    }
+
+});
+
 // ==================================================
 // Get a single record
 router.get('/:id', (req, res) => {
@@ -234,7 +286,7 @@ router.get('/:id', (req, res) => {
         // left join AUDT_CHKL_RFNC acr on am.AUDIT_MANAGER_ID = acr.AUDIT_MANAGER_ID
         // where am.AUDIT_MANAGER_ID = '${req.params.id}'`;
 
-        const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE from AUDT_CHKL_QUST acq 
+        const query = `SELECT am.*, acq.QUESTION, aco.OBSERVATION, acr.REFERENCE, acq.CHECKLIST_ID from AUDT_CHKL_QUST acq 
         left join AUDT_CHKL_OBSN aco on acq.CHECKLIST_ID = aco.CHECKLIST_ID and aco.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID
         left join AUDT_CHKL_RFNC acr on acq.CHECKLIST_ID = acr.CHECKLIST_ID and acr.AUDIT_MANAGER_ID = acq.AUDIT_MANAGER_ID
         join AUDIT_MANAGER am on acq.AUDIT_MANAGER_ID = am.AUDIT_MANAGER_ID

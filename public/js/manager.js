@@ -1,4 +1,4 @@
-import { loadHeaderFooter, getUserValue } from "./utils.mjs";
+import { loadHeaderFooter, getUserValue, getDateTime } from "./utils.mjs";
 loadHeaderFooter();
 
 // get user value
@@ -39,8 +39,20 @@ fetch(url, { method: "GET" })
     btneditdetail.classList.add("btn");
     btneditdetail.classList.add("btn-primary");
     btneditdetail.id = "btnEditDetail";
-    divDetailHeader.appendChild(h2);
-    divDetailHeader.appendChild(btneditdetail);
+    const btnClose = document.createElement("button");
+    btnClose.textContent = "Close";
+    btnClose.classList.add("btn");
+    btnClose.classList.add("btn-primary");
+    btnClose.id = "btnClose";
+    const divDetailBtns = document.createElement("div");
+    divDetailBtns.classList.add("detailbtns");
+    divDetailBtns.appendChild(h2);
+    divDetailBtns.appendChild(btneditdetail);
+    divDetailBtns.appendChild(btnClose);
+
+    // divDetailHeader.appendChild(h2);
+    divDetailHeader.appendChild(divDetailBtns);
+    // divDetailHeader.appendChild(btnClose);
     section.appendChild(divDetailHeader);
 
     const fieldList = [
@@ -56,6 +68,7 @@ fetch(url, { method: "GET" })
       if (!fieldList.includes(key)) {
         continue;
       }
+      let amid = record[0].AUDIT_MANAGER_ID;
       const p = document.createElement("p");
       p.textContent = key + ": " + record[0][key];
 
@@ -83,6 +96,14 @@ fetch(url, { method: "GET" })
     sectionChecklist.appendChild(h3);
     main.appendChild(sectionChecklist);
 
+    // Observation button
+    const btnObservation = document.createElement("button");
+    btnObservation.textContent = "Add Observation";
+    btnObservation.classList.add("btn");
+    btnObservation.classList.add("btn-primary");
+    btnObservation.id = "btnAddObsv";
+    sectionChecklist.appendChild(btnObservation);
+
     // Checklist button
     const btnChecklist = document.createElement("button");
     btnChecklist.textContent = "Add Checklist";
@@ -90,9 +111,6 @@ fetch(url, { method: "GET" })
     btnChecklist.classList.add("btn-primary");
     btnChecklist.id = "btnAddQust";
     sectionChecklist.appendChild(btnChecklist);
-    // btnChecklist.addEventListener('click', () => {
-    //     window.location.href = 'checklist.html?id=' + id;
-    // });
 
     fetch(checklistUrl + id, { method: "GET" })
       .then((response) => response.json())
@@ -141,12 +159,25 @@ fetch(url, { method: "GET" })
                   break;
                 case "OBSERVATION":
                   const ocklst = document.createElement("p");
-                  ocklst.id = "observation";
+                  ocklst.classList.add("observations");
                   // Set to zls if null
                   if (records[row][key] == null) {
                     records[row][key] = "";
                   }
                   ocklst.textContent = key + ": " + records[row][key];
+                  // create a button to edit the observation
+                  const btnEditObs = document.createElement("button");
+                  btnEditObs.textContent = "Observation";
+                  btnEditObs.classList.add("btn");
+                  btnEditObs.classList.add("btn-primary");
+                  btnEditObs.classList.add("btnEditObs");
+                  // Set the custom attribute to the checklist id
+                  btnEditObs.setAttribute(
+                    "data-checklist-id",
+                    records[row].CHECKLIST_ID
+                  );
+
+                  // rowdiv.appendChild(btnEditObs);
                   rowdiv.appendChild(ocklst);
                   break;
                 case "REFERENCE":
@@ -175,6 +206,62 @@ fetch(url, { method: "GET" })
       });
     main.appendChild(sectionChecklist);
 
+      // listen for btnAddObsv click, open dialog, populate fields
+    const btnAddObsv = document.getElementById("btnAddObsv");
+    btnAddObsv.addEventListener("click", async (e) => {
+      // prevent default
+      e.preventDefault();
+      // get the dialog from the html
+      const addObsDialog = document.querySelector("#addobservation");
+      // show the dialog
+      addObsDialog.showModal();
+
+      // listen ofr the savenewobservation button
+      const btnSaveNewObservation = document.getElementById(
+        "saveobservation"
+      );
+      btnSaveNewObservation.addEventListener("click", async (e) => {
+        // prevent default
+        e.preventDefault();
+        // get the checklist id
+        let checklistId = document.getElementById("checklistid").value;
+        // prepend with 0's to make 7 digits
+        checklistId = checklistId.padStart(7, "0");
+        // get the dialog from the html
+        const addObsDialog = document.querySelector("#addobservation");
+        // get the values from the form
+        const newObservation = document.getElementById("newobservation").value;
+        // console.log(newObservation);
+        // create the new record
+        const newRecord = {
+          AUDIT_MANAGER_ID: id,
+          CHECKLIST_ID: checklistId,
+          OBSERVATION: newObservation,
+        };
+        // console.log(newRecord);
+
+        // post the new record
+        fetch(checklistUrl + '/obsn', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRecord),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            // clear the form
+            document.getElementById("checklistid").value = "";
+            document.getElementById("newobservation").value = "";
+            // close the dialog
+            addObsDialog.close();
+            // reload the page
+            window.location.reload();
+          });
+      });
+    });
+
     const btnAddQust = document.getElementById("btnAddQust");
     btnAddQust.addEventListener("click", async (e) => {
       // prevent default
@@ -184,7 +271,7 @@ fetch(url, { method: "GET" })
       // show the dialog
       addQdialog.showModal();
 
-      // listen ofr the savenewquestion button
+      // listen for the savenewquestion button
       const btnSaveNewQuestion = document.getElementById("savenewquestion");
       btnSaveNewQuestion.addEventListener("click", async (e) => {
         // prevent default
@@ -266,9 +353,11 @@ fetch(url, { method: "GET" })
       document.getElementById("standard").value = record[0].STANDARD;
       document.getElementById("subject").value = record[0].SUBJECT;
       document.getElementById("scheddate").value = new Date(
-        record[0].SCHEDULED_DATE).toISOString().split('T')[0];
-      document.getElementById("leadauditor").value =
-        record[0].LEAD_AUDITOR;
+        record[0].SCHEDULED_DATE
+      )
+        .toISOString()
+        .split("T")[0];
+      document.getElementById("leadauditor").value = record[0].LEAD_AUDITOR;
       document.getElementById("auditee").value = record[0].AUDITEE1;
     });
 
@@ -284,8 +373,12 @@ fetch(url, { method: "GET" })
       const editSubject = document.getElementById("subject").value;
       const editScheduledDate = document.getElementById("scheddate").value;
       // change the following to uppercase
-      const editLeadAuditor = document.getElementById("leadauditor").value.toUpperCase();
-      const editAuditee1 = document.getElementById("auditee").value.toUpperCase();
+      const editLeadAuditor = document
+        .getElementById("leadauditor")
+        .value.toUpperCase();
+      const editAuditee1 = document
+        .getElementById("auditee")
+        .value.toUpperCase();
       // create the record
       const editRecord = {
         STANDARD: editStandard,
@@ -313,5 +406,31 @@ fetch(url, { method: "GET" })
           window.location.reload();
         });
     });
-  });
 
+    btnClose.addEventListener("click", async (e) => {
+      // prevent default
+      e.preventDefault();
+      // close URL
+      let closeUrl = "http://localhost:3008/manager/" + "completed";
+      // create the record
+      const closeRecord = {
+        AUDIT_MANAGER_ID: record[0].AUDIT_MANAGER_ID,
+        COMPLETION_DATE: getDateTime(),
+      };
+
+      // put the edits
+      fetch(closeUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(closeRecord),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // reload the page
+          window.location.reload();
+        });
+
+    });
+  });

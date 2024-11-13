@@ -215,6 +215,44 @@ router.get('/:id', (req, res) => {
     }
 });
 
+
+// CLOSE THE AUDIT<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+router.put('/completed', (req, res) => {
+    // console.log("Params: " + req.params.id);    
+    try {
+        const connection = mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            port: 3306,
+            database: 'quality'
+        });
+        connection.connect(function(err) {
+            if (err) {
+                console.error('Error connecting: ' + err.stack);
+                return;
+            }
+            const query = `UPDATE AUDIT_MANAGER SET COMPLETION_DATE = '${req.body.COMPLETION_DATE}' WHERE AUDIT_MANAGER_ID = '${req.body.AUDIT_MANAGER_ID}'`;
+            // console.log(query);
+            
+            connection.query(query, (err, rows, fields) => {
+                if (err) {
+                    console.log('Failed to query for input : ' + err);
+                    res.sendStatus(500);
+                    return;
+                }
+                res.json(rows);
+            });
+            
+            connection.end();
+        });
+    } catch (err) {
+        console.log('Error connecting to Db 345');
+        return;
+    }
+    
+});
+
 // ==================================================
 //  PUT audit manager record
 router.put('/:id', (req, res) => {
@@ -258,48 +296,5 @@ router.put('/:id', (req, res) => {
     }
 
 });
-
-// CLOSE THE INPUT<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-router.put('/close/:id', (req, res) => {
-    // console.log("Params: " + req.params.id);
-    // console.log(req.body);
-    let mytable = '';
-    let appended = '';
-    const myfield = Object.keys (req.body) [1]
-    
-    try {
-        const connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-            port: 3306,
-            database: 'quality'
-        });
-        connection.connect(function(err) {
-            if (err) {
-                console.error('Error connecting: ' + err.stack);
-                return;
-            }
-        const query = `UPDATE PEOPLE_INPUT SET CLOSED = 'Y', CLOSED_DATE = '${req.body.CLOSED_DATE}' WHERE INPUT_ID = '${req.params.id}'`;
-        // console.log(query);
-
-        connection.query(query, (err, rows, fields) => {
-            if (err) {
-                console.log('Failed to query for input : ' + err);
-                res.sendStatus(500);
-                return;
-            }
-            res.json(rows);
-        });
-    
-        connection.end();
-        });
-    } catch (err) {
-        console.log('Error connecting to Db 345');
-        return;
-    }
-
-});
-
 
 module.exports = router;

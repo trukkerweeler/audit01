@@ -56,6 +56,25 @@
           <button type="submit" id="savenewquestion">Save New Question</button>
         </form>
       </dialog>
+      <!-- Observation dialog -->
+      <dialog id="addobservation" class="editDialog">
+        <form id="observationForm" class="form">
+          <h2 class="formh2">Observation</h2>
+          <label for="checklistid">Checklist Id:</label>
+          <input type="text" id="checklistid" name="checklistid" required />
+          <label for="observation">Observation:</label>
+          <textarea
+            type="textarea"
+            id="newobservation"
+            name="observation"
+            rows="4"
+            cols="50"
+            wrap="soft"
+            required
+          ></textarea>
+          <button type="submit" id="saveobservation">Save Observation</button>
+        </form>
+      </dialog>
     <!-- </main> -->
     <footer id="footer"></footer>
   </body>

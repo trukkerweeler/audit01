@@ -90,7 +90,8 @@ section h3 {
 }
 
 section p {
-    grid-column: span 3;
+    
+    /* grid-column: span 3; */
     margin-top: 0;
     /* border: #000 1px solid; */
 }
@@ -461,15 +462,16 @@ h1 {
     padding-left: 5px;
 }
 
-#observation {
+.observations {
     grid-column: span 1/6;
-    grid-row-start: 4;
+    grid-row-start: 5;
     grid-column-start: 1;
     border: #000 1px solid;
     text-align: left;
     font-weight: 600;
     font-size: small;
     padding-left: 5px;
+    padding-bottom: 8px;
     height: 2rem;
 }
 
@@ -482,6 +484,19 @@ h1 {
     font-weight: 600;
     font-size: small;
     padding-left: 5px;
+}
+
+.btnEditObs {
+    grid-column: span 1;
+    grid-row-start: 4;
+    grid-column-start: 5;
+    border: #000 1px solid;
+    text-align: center;
+    font-weight: 600;
+    font-size: small;
+    padding-left: 5px;
+    margin-left: 50%;
+    /* margin-right: 25%; */
 }
 
 .details {
@@ -499,10 +514,11 @@ margin-bottom: 3px;
     border: none;
 }
 
-#btnAddQust {
+#btnAddQust, #btnAddObsv {
     /* float in parent */
     float: right;
     /* justify-self: end; */
+    margin-left: 10px;
 }
 
 dialog form {
@@ -567,7 +583,7 @@ dialog form {
     .entryform {
         display: none;
     }
-    #main-nav, #btnEditDetail, #btnAddQust, #btnaddaudit{
+    #main-nav, #btnEditDetail, #btnAddQust, #btnaddaudit, #btnAddObsv{
         display: none;
     }
     #doit {
