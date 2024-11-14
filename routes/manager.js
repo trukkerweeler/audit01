@@ -256,7 +256,7 @@ router.put('/completed', (req, res) => {
 // ==================================================
 //  PUT audit manager record
 router.put('/:id', (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     // console.log(req.params.id);
     let mytable = '';
     let appended = '';

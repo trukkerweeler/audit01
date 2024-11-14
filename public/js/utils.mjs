@@ -53,3 +53,23 @@ export function getDateTime() {
         return record;
     });
   }
+
+  // export function getcodedesc(code) {
+  //   const url = 'http://localhost:3008/manager/' + code;
+  //   fetch(url, { method: 'GET' })
+  //   .then(response => response.json())
+  //   .then(record => {
+  //       return record;
+  //   });
+  // }
+
+  export async function getcodedesc(code) {
+    const res = await fetch(`../json/qmssubjects.json`);
+    const data = await res.json();
+    let mySubjects = data.qmsSubjects;
+    for (let i = 0; i < mySubjects.length; i++) {
+      if (mySubjects[i].code === code) {
+        return mySubjects[i].name;
+      }
+    }
+  }

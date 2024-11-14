@@ -1,4 +1,4 @@
-import { loadHeaderFooter } from './utils.mjs';
+import { loadHeaderFooter, getcodedesc } from './utils.mjs';
 loadHeaderFooter();
 const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION','SCORE', 'RESULT', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATE_DATE'];
 
@@ -38,6 +38,12 @@ function getRecords () {
                         } else {
                             if (key == 'AUDIT_MANAGER_ID') {
                                 td.innerHTML = `<a href="http://localhost:3008/manager.html?id=${record[key]}">${record[key]}</a>`;
+                            } else if (key == 'SUBJECT') {
+                                // td.textContent = record[key] + ' - ' + getcodedesc(record['SUBJECT']);
+                                td.textContent = record[key]
+                                getcodedesc(record['SUBJECT']).then(desc => {
+                                    td.textContent += ' - ' + desc;
+                                });
                             } else {
                                 td.textContent = record[key];
                             }

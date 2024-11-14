@@ -1,4 +1,4 @@
-import { loadHeaderFooter, getUserValue, getDateTime } from "./utils.mjs";
+import { loadHeaderFooter, getUserValue, getDateTime, getcodedesc } from "./utils.mjs";
 loadHeaderFooter();
 
 // get user value
@@ -63,6 +63,7 @@ fetch(url, { method: "GET" })
       "SCHEDULED_DATE",
       "LEAD_AUDITOR",
       "AUDITEE1",
+      "COMPLETION_DATE",
     ];
     for (const key in record[0]) {
       if (!fieldList.includes(key)) {
@@ -74,15 +75,19 @@ fetch(url, { method: "GET" })
 
       // if the last 4 =='DATE' then format the date
       if (key.slice(-4) == "DATE") {
-        p.textContent =
-          key + ": " + new Date(record[0][key]).toLocaleDateString();
+        // if its the completion date and its null then set it to zls
+        if (key == "COMPLETION_DATE" && record[0][key] == null) {
+          p.textContent = key + ": ";
+        } else {
+        p.textContent = key + ": " + new Date(record[0][key]).toLocaleDateString();
+      }
       }
 
       if (key == "AUDIT_ID") {
         // p.innerHTML = key + ': <a href="http://localhost:3008/manager.html?id=' + record[0][key] + '">' + record[0][key] + '</a>';
         p.textContent = key + ": " + record[0][key];
         p.setAttribute("id", "audit_id");
-      }
+      }      
 
       section.appendChild(p);
     }
