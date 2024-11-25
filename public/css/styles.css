@@ -475,6 +475,10 @@ h1 {
     height: 2rem;
 }
 
+#observationForm {
+    background-color: orange;   
+}
+
 #question {
     grid-column: span 1/6;
     grid-row-start: 3;
@@ -577,6 +581,9 @@ dialog form {
 
 
 @media print {
+    .btn {
+        display: none;
+    }
     form{
         display: none;
     }

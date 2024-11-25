@@ -212,7 +212,7 @@ router.post('/', (req, res) => {
 // create observation record
 router.post('/obsn', (req, res) => {
     // console.log('102');
-    console.log(req.body);
+    // console.log(req.body);
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
