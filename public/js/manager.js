@@ -236,6 +236,8 @@ fetch(url, { method: "GET" })
         const addObsDialog = document.querySelector("#addobservation");
         // get the values from the form
         const newObservation = document.getElementById("newobservation").value;
+        // fix the apostrophes
+        newObservation = newObservation.replace(/'/g, "''");
         // console.log(newObservation);
         // create the new record
         const newRecord = {

@@ -149,28 +149,18 @@ router.post('/', (req, res) => {
                 console.error('Error connecting: ' + err.stack);
                 return;
             }
-        // console.log('Connected to DB');
-        formattedQuestion = req.body.QUESTION.replace(/'/g, "\\'");
-             
-        const query = `insert into AUDT_CHKL_QUST (AUDIT_MANAGER_ID
-            , CHECKLIST_ID
-            , QUESTION
-            ) values (
-                '${req.body.AUDIT_MANAGER_ID}'
-                , '${req.body.CHECKLIST_ID}'                                                                                                                                                                                                    
-                , '${formattedQuestion}'
-            )`;
-        
-        console.log(query);
 
-        connection.query(query, (err, rows, fields) => {
+        const query = `insert into AUDT_CHKL_QUST (AUDIT_MANAGER_ID, CHECKLIST_ID, QUESTION) values (?, ?, ?)`;
+        const values = [req.body.AUDIT_MANAGER_ID, req.body.CHECKLIST_ID, req.body.QUESTION];
+
+        connection.query(query, values, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for CHECKLIST insert: ' + err);
                 res.sendStatus(500);
                 return;
             }
             res.json(rows);
-        });
+        });             
 
         const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_MANAGER_ID}' WHERE TABLE_NAME = 'AUDIT_MANAGER'`;
         connection.query(updateQuery, (err, rows, fields) => {
@@ -226,23 +216,11 @@ router.post('/obsn', (req, res) => {
                 console.error('Error connecting: ' + err.stack);
                 return;
             }
-        // console.log('Connected to DB');
-        formattedObservation = req.body.OBSERVATION.replace(/'/g, "\\'");
-        // replace backslash with double backslash
-        formattedObservation = formattedObservation.replace(/\\/g, "\\\\");
-             
-        const query = `insert into AUDT_CHKL_OBSN (AUDIT_MANAGER_ID
-            , CHECKLIST_ID
-            , OBSERVATION
-            ) values (
-                '${req.body.AUDIT_MANAGER_ID}'
-                , '${req.body.CHECKLIST_ID}'                                                                                                                                                                                                    
-                , '${formattedObservation}'
-            )`;
-        
-        // console.log(query);
 
-        connection.query(query, (err, rows, fields) => {
+        const query = `insert into AUDT_CHKL_OBSN (AUDIT_MANAGER_ID, CHECKLIST_ID, OBSERVATION) values (?, ?, ?)`;
+        const values = [req.body.AUDIT_MANAGER_ID, req.body.CHECKLIST_ID, req.body.OBSERVATION];
+
+        connection.query(query, values, (err, rows, fields) => {
             if (err) {
                 console.log('Failed to query for OBSERVATION insert: ' + err);
                 res.sendStatus(500);
