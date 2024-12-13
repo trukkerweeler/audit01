@@ -2,7 +2,7 @@ import { loadHeaderFooter, getcodedesc } from './utils.mjs';
 loadHeaderFooter();
 const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION','SCORE', 'RESULT', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATE_DATE'];
 
-const url = 'http://localhost:3008/schedule';
+const url = 'http://localhost:3008/results';
 
 function getRecords () {
     const main = document.querySelector('main');
@@ -21,7 +21,7 @@ function getRecords () {
         for (let key in records[0]) {
             if (!skippers.includes(key)){
             const th = document.createElement('th');
-            th.textContent = key.replace(/_/g, ' ');
+            th.textContent = key;
             header.appendChild(th);
             }
         }

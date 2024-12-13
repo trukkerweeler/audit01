@@ -71,13 +71,13 @@ fetch(url, { method: "GET" })
       }
       let amid = record[0].AUDIT_MANAGER_ID;
       const p = document.createElement("p");
-      p.textContent = key + ": " + record[0][key];
+      p.textContent = key.replace(/_/g, " ") + ": " + record[0][key];
 
       // if the last 4 =='DATE' then format the date
       if (key.slice(-4) == "DATE") {
         // if its the completion date and its null then set it to zls
         if (key == "COMPLETION_DATE" && record[0][key] == null) {
-          p.textContent = key + ": ";
+          p.textContent = key.replace(/_/g, " ") + ": ";
         } else {
         p.textContent = key + ": " + new Date(record[0][key]).toLocaleDateString();
       }
@@ -85,7 +85,7 @@ fetch(url, { method: "GET" })
 
       if (key == "AUDIT_ID") {
         // p.innerHTML = key + ': <a href="http://localhost:3008/manager.html?id=' + record[0][key] + '">' + record[0][key] + '</a>';
-        p.textContent = key + ": " + record[0][key];
+        p.textContent = key.replace(/_/g, " ") + ": " + record[0][key];
         p.setAttribute("id", "audit_id");
       }      
 
@@ -235,7 +235,7 @@ fetch(url, { method: "GET" })
         // get the dialog from the html
         const addObsDialog = document.querySelector("#addobservation");
         // get the values from the form
-        const newObservation = document.getElementById("newobservation").value;
+        let newObservation = document.getElementById("newobservation").value;
         // fix the apostrophes
         newObservation = newObservation.replace(/'/g, "''");
         // console.log(newObservation);

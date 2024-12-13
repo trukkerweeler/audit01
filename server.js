@@ -31,6 +31,9 @@ app.use("/manager", managerRoutes);
 const checklistRoutes = require("./routes/checklist");
 app.use("/checklist", checklistRoutes);
 
+const resultsRoutes = require("./routes/results");
+app.use("/results", resultsRoutes);
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
