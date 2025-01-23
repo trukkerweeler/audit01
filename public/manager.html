@@ -56,12 +56,13 @@
           <button type="submit" id="savenewquestion">Save New Question</button>
         </form>
       </dialog>
+
       <!-- Observation dialog -->
-      <dialog id="addobservation" class="editDialog">
+      <dialog id="editobservation" class="editDialog">
         <form id="observationForm" class="form">
           <h2 class="formh2">Observation</h2>
-          <label for="checklistid">Checklist Id:</label>
-          <input type="text" id="checklistid" name="checklistid" required />
+           <p>Checklist Id:</p>
+           <p id="obsid"></p>
           <label for="observation">Observation:</label>
           <textarea
             type="textarea"

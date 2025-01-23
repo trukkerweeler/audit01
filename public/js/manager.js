@@ -101,14 +101,6 @@ fetch(url, { method: "GET" })
     sectionChecklist.appendChild(h3);
     main.appendChild(sectionChecklist);
 
-    // Observation button
-    const btnObservation = document.createElement("button");
-    btnObservation.textContent = "Add Observation";
-    btnObservation.classList.add("btn");
-    btnObservation.classList.add("btn-primary");
-    btnObservation.id = "btnAddObsv";
-    sectionChecklist.appendChild(btnObservation);
-
     // Checklist button
     const btnChecklist = document.createElement("button");
     btnChecklist.textContent = "Add Checklist";
@@ -163,15 +155,18 @@ fetch(url, { method: "GET" })
                   rowdiv.appendChild(qcklst);
                   break;
                 case "OBSERVATION":
-                  const ocklst = document.createElement("p");
+                  const ocklst = document.createElement("div");
                   ocklst.classList.add("observations");
+                  const obs = document.createElement("p");
+                  obs.id = "observation";
                   // Set to zls if null
                   if (records[row][key] == null) {
                     records[row][key] = "";
                   }
-                  ocklst.textContent = key + ": " + records[row][key];
+                  obs.textContent = key + ": " + records[row][key];
                   // create a button to edit the observation
                   const btnEditObs = document.createElement("button");
+                  // btnEditObs.textContent = "Observation: " + records[row].CHECKLIST_ID;
                   btnEditObs.textContent = "Observation";
                   btnEditObs.classList.add("btn");
                   btnEditObs.classList.add("btn-primary");
@@ -183,6 +178,8 @@ fetch(url, { method: "GET" })
                   );
 
                   // rowdiv.appendChild(btnEditObs);
+                  ocklst.appendChild(obs);
+                  ocklst.appendChild(btnEditObs);
                   rowdiv.appendChild(ocklst);
                   break;
                 case "REFERENCE":
@@ -211,63 +208,6 @@ fetch(url, { method: "GET" })
       });
     main.appendChild(sectionChecklist);
 
-      // listen for btnAddObsv click, open dialog, populate fields
-    const btnAddObsv = document.getElementById("btnAddObsv");
-    btnAddObsv.addEventListener("click", async (e) => {
-      // prevent default
-      e.preventDefault();
-      // get the dialog from the html
-      const addObsDialog = document.querySelector("#addobservation");
-      // show the dialog
-      addObsDialog.showModal();
-
-      // listen ofr the savenewobservation button
-      const btnSaveNewObservation = document.getElementById(
-        "saveobservation"
-      );
-      btnSaveNewObservation.addEventListener("click", async (e) => {
-        // prevent default
-        e.preventDefault();
-        // get the checklist id
-        let checklistId = document.getElementById("checklistid").value;
-        // prepend with 0's to make 7 digits
-        checklistId = checklistId.padStart(7, "0");
-        // get the dialog from the html
-        const addObsDialog = document.querySelector("#addobservation");
-        // get the values from the form
-        let newObservation = document.getElementById("newobservation").value;
-        // fix the apostrophes
-        newObservation = newObservation.replace(/'/g, "''");
-        // console.log(newObservation);
-        // create the new record
-        const newRecord = {
-          AUDIT_MANAGER_ID: id,
-          CHECKLIST_ID: checklistId,
-          OBSERVATION: newObservation,
-        };
-        // console.log(newRecord);
-
-        // post the new record
-        fetch(checklistUrl + '/obsn', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newRecord),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            // console.log(data);
-            // clear the form
-            document.getElementById("checklistid").value = "";
-            document.getElementById("newobservation").value = "";
-            // close the dialog
-            addObsDialog.close();
-            // reload the page
-            window.location.reload();
-          });
-      });
-    });
 
     const btnAddQust = document.getElementById("btnAddQust");
     btnAddQust.addEventListener("click", async (e) => {
@@ -438,6 +378,71 @@ fetch(url, { method: "GET" })
           // reload the page
           window.location.reload();
         });
+      // alert to send results email
+      alert("Send results email to auditee");
 
     });
+
+    // listen for btnEditObs click, open dialog, populate fields, associate checklist id
+    // const btnEditObs = document.querySelectorAll(".btnEditObs");
+    document.addEventListener("click", async (e) => {
+      // check if the button clicked is the btnEditObs
+      if (e.target.classList.contains("btnEditObs")) {
+        // get the checklist id from the custom attribute
+        const checklistId = e.target.getAttribute("data-checklist-id");
+        console.log(checklistId);
+        // get the dialog from the html
+        const editObsDialog = document.querySelector("#editobservation");
+        // show the dialog
+        editObsDialog.showModal();
+        // set the value after the dialog is shown
+        document.getElementById("obsid").textContent = checklistId;
+        
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      // listen for the saveobservation button
+      const btnSaveNewObservation = document.getElementById("saveobservation");
+      btnSaveNewObservation.addEventListener("click", async (e) => {
+        // prevent default
+        e.preventDefault();
+        // get the checklist id
+        let checklistId = document.getElementById("checklistid").value;
+        // prepend with 0's to make 7 digits
+        checklistId = checklistId.padStart(7, "0");
+        // get the dialog from the html
+        // const addObsDialog = document.querySelector("#addobservation");
+        const addObsDialog = document.querySelector("#editobservation");
+        // get the values from the form
+        let newObservation = document.getElementById("newobservation").value;
+        // create the new record
+        const newRecord = {
+          AUDIT_MANAGER_ID: id,
+          CHECKLIST_ID: checklistId,
+          OBSERVATION: newObservation,
+        };
+        console.log(newRecord);
+
+        // post the new record
+        fetch(checklistUrl + '/obsn', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRecord),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log(data);
+            // clear the form
+            document.getElementById("checklistid").value = "";
+            document.getElementById("newobservation").value = "";
+            // close the dialog
+            addObsDialog.close();
+            // reload the page
+            window.location.reload();
+          });
+      });
+      
+    });
+
   });
