@@ -132,7 +132,6 @@ fetch(url, { method: "GET" })
             if (checklistFields.includes(key)) {
               const divcklst = document.createElement("div");
               // console.log(key);
-              // divcklst.classList.add('checklist');
               switch (key) {
                 case "CHECKLIST_ID":
                   const pcklst = document.createElement("p");
@@ -390,16 +389,15 @@ fetch(url, { method: "GET" })
       if (e.target.classList.contains("btnEditObs")) {
         // get the checklist id from the custom attribute
         const checklistId = e.target.getAttribute("data-checklist-id");
-        console.log(checklistId);
+        // console.log(checklistId);
         // get the dialog from the html
         const editObsDialog = document.querySelector("#editobservation");
         // show the dialog
         editObsDialog.showModal();
         // set the value after the dialog is shown
-        document.getElementById("obsid").textContent = checklistId;
-        
-        // await new Promise((resolve) => setTimeout(resolve, 1000));
+        document.getElementById("obsid").textContent = checklistId;        
       }
+
       // listen for the saveobservation button
       const btnSaveNewObservation = document.getElementById("saveobservation");
       btnSaveNewObservation.addEventListener("click", async (e) => {
@@ -410,7 +408,6 @@ fetch(url, { method: "GET" })
         // prepend with 0's to make 7 digits
         checklistId = checklistId.padStart(7, "0");
         // get the dialog from the html
-        // const addObsDialog = document.querySelector("#addobservation");
         const addObsDialog = document.querySelector("#editobservation");
         // get the values from the form
         let newObservation = document.getElementById("newobservation").value;
