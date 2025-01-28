@@ -404,7 +404,7 @@ fetch(url, { method: "GET" })
         // prevent default
         e.preventDefault();
         // get the checklist id
-        let checklistId = document.getElementById("checklistid").value;
+        let checklistId = document.getElementById("obsid").textContent;
         // prepend with 0's to make 7 digits
         checklistId = checklistId.padStart(7, "0");
         // get the dialog from the html
@@ -431,7 +431,7 @@ fetch(url, { method: "GET" })
           .then((data) => {
             // console.log(data);
             // clear the form
-            document.getElementById("checklistid").value = "";
+            document.getElementById("obsid").textContent = "";
             document.getElementById("newobservation").value = "";
             // close the dialog
             addObsDialog.close();
