@@ -1,7 +1,8 @@
-import { loadHeaderFooter, getUserValue, getDateTime } from './utils.mjs';
+import { loadHeaderFooter, getUserValue, getDateTime, myport } from './utils.mjs';
 
 loadHeaderFooter();
 const user = await getUserValue();
+const port = myport();
 
 const main = document.querySelector('main');
 const iid = document.querySelector('#iid');
@@ -22,7 +23,7 @@ button.addEventListener('click', async (event) => {
         }
     }
 
-    const url = 'http://localhost:3008/schedule/' + aidValue;
+    const url = `http://localhost:${port}/schedule/${aidValue}`;
 
     // Delete the child nodes of the main element
     while (main.firstChild) {
@@ -291,7 +292,7 @@ closeaction.addEventListener('click', async (event) => {
         }
     }
 
-    const url = 'http://localhost:3008/schedule/close/' + aidValue;
+    const url = `http://localhost:${port}/schedule/close/${aidValue}`;
     // console.log(url);
 
     let data = {

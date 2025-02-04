@@ -27,7 +27,7 @@ export async function loadHeaderFooter(){
 
   // get user value from config.json file
 export async function getUserValue() {
-    const res = await fetch("../js/config.json");
+    const res = await fetch("../json/config.json");
     const data = await res.json();
     return data.user;
   }
@@ -72,4 +72,8 @@ export function getDateTime() {
         return mySubjects[i].name;
       }
     }
+  }
+
+  export function myport() {
+    return 3008;
   }

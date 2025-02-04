@@ -1,10 +1,11 @@
-import { loadHeaderFooter } from './utils.mjs';
+import { getUserValue, loadHeaderFooter, myport } from './utils.mjs';
 loadHeaderFooter();
 const skippers = ['JOB_CODE','FUNCTION_CODE', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATED_DATE'];
 // const user = JSON.parse(localStorage.getItem('user'));
-const user = 'TKENT';
+const user = await getUserValue();
+const port = myport();
 
-let url = 'http://localhost:3008/process';
+let url = `http://localhost:${port}/process`;
 
 function getRecords () {
     const main = document.querySelector('main');
@@ -39,7 +40,7 @@ function getRecords () {
                             td.textContent = record[key].slice(0,10);
                         } else {
                             if (key == 'AUDIT_MANAGER_ID') {
-                                td.innerHTML = `<a href="http://localhost:3008/process.html?id=${record[key]}">${record[key]}</a>`;
+                                td.innerHTML = `<a href="http://localhost:${port}/process.html?id=${record[key]}">${record[key]}</a>`;
                             } else {
                                 td.textContent = record[key];
                             }

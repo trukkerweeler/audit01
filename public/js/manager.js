@@ -1,16 +1,17 @@
-import { loadHeaderFooter, getUserValue, getDateTime, getcodedesc } from "./utils.mjs";
+import { loadHeaderFooter, getUserValue, getDateTime, getcodedesc, myport } from "./utils.mjs";
 loadHeaderFooter();
 
 // get user value
-const user = getUserValue();
+const user = await getUserValue();
+const port = myport();
 
 // get url parameters
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get("id");
 
-const url = "http://localhost:3008/manager/" + id;
-const managerUrl = "http://localhost:3008/manager/";
-const checklistUrl = "http://localhost:3008/checklist/";
+const url = `http://localhost:${port}/manager/${id}`;
+const managerUrl = `http://localhost:${port}/manager/`;
+const checklistUrl = `http://localhost:${port}/checklist/`;
 // console.log(url);
 
 const main = document.querySelector("main");
@@ -357,7 +358,7 @@ fetch(url, { method: "GET" })
       // prevent default
       e.preventDefault();
       // close URL
-      let closeUrl = "http://localhost:3008/manager/" + "completed";
+      let closeUrl = `http://localhost:${port}/manager/completed`;
       // create the record
       const closeRecord = {
         AUDIT_MANAGER_ID: record[0].AUDIT_MANAGER_ID,

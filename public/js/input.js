@@ -1,5 +1,6 @@
-import { loadHeaderFooter } from './utils.mjs';
+import { loadHeaderFooter, myport } from './utils.mjs';
 loadHeaderFooter();
+const port = myport();
 
 // Get the project id from the url params
 let queryString = window.location.search;
@@ -7,7 +8,7 @@ let urlParams = new URLSearchParams(queryString);
 let iid = urlParams.get('id');
     
 
-const url = 'http://localhost:3003/input/' + iid;
+const url = `http://localhost:${port}/input/${iid}`;
 
 const main = document.querySelector('main');
 // Delete the child nodes of the main element

@@ -1,9 +1,8 @@
-import { loadHeaderFooter } from './utils.mjs';
+import { loadHeaderFooter, myport, getUserValue } from './utils.mjs';
 loadHeaderFooter();
-
-const url = 'http://localhost:3008/schedule';
-
-const user = 'TKENT';
+const port = myport();
+const url = `http://localhost:${port}/schedule`;
+const user = await getUserValue();
 
 // Send a POST request
 const form = document.querySelector('form');

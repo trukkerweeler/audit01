@@ -1,8 +1,9 @@
-import { loadHeaderFooter, getcodedesc } from './utils.mjs';
+import { loadHeaderFooter, getcodedesc, myport } from './utils.mjs';
 loadHeaderFooter();
+const port = myport();
 const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION','SCORE', 'RESULT', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATE_DATE'];
 
-const url = 'http://localhost:3008/results';
+const url = `http://localhost:${port}/results`;
 
 function getRecords () {
     const main = document.querySelector('main');
@@ -37,7 +38,7 @@ function getRecords () {
                             td.textContent = record[key].slice(0,10);
                         } else {
                             if (key == 'AUDIT_MANAGER_ID') {
-                                td.innerHTML = `<a href="http://localhost:3008/manager.html?id=${record[key]}">${record[key]}</a>`;
+                                td.innerHTML = `<a href="http://localhost:${port}/manager.html?id=${record[key]}">${record[key]}</a>`;
                             } else if (key == 'SUBJECT') {
                                 // td.textContent = record[key] + ' - ' + getcodedesc(record['SUBJECT']);
                                 td.textContent = record[key]

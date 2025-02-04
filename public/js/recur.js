@@ -1,5 +1,7 @@
-import { loadHeaderFooter } from './utils.mjs';
+import { loadHeaderFooter, myport, getUserValue } from './utils.mjs';
 loadHeaderFooter();
+const port = myport();
+const user = await getUserValue();
 
 const btnRecurs = document.querySelector('#btnRecurs');
 btnRecurs.addEventListener('click', () => {
