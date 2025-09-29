@@ -80,7 +80,6 @@ button.addEventListener('click', async (event) => {
                 console.log('recur id is null');
             }
 
-
             aiClosedDate.setAttribute('class', 'tbl');
 
             const caAssTo = document.createElement('p');
@@ -100,8 +99,7 @@ button.addEventListener('click', async (event) => {
 
             const caType = document.createElement('p');
             caType.textContent = 'Type:' + ' ' + record[key]['TYPE'];
-            caType.setAttribute('class', 'tbl');
-           
+            caType.setAttribute('class', 'tbl');           
 
             const ncTrendTitle = document.createElement('h3');
             ncTrendTitle.setAttribute('class', 'header3');
@@ -201,7 +199,7 @@ modalsave.addEventListener('click', async (event) => {
         }
     }
 
-    const url = 'http://localhost:3008/schedule/' + aidValue;
+    const url = `http://localhost:${port}/schedule/${aidValue}`;
     // console.log(url);
 
     const inputtext = document.querySelector("#inputtext");

@@ -85,7 +85,6 @@ fetch(url, { method: "GET" })
       }
 
       if (key == "AUDIT_ID") {
-        // p.innerHTML = key + ': <a href="http://localhost:3008/manager.html?id=' + record[0][key] + '">' + record[0][key] + '</a>';
         p.textContent = key.replace(/_/g, " ") + ": " + record[0][key];
         p.setAttribute("id", "audit_id");
       }      
