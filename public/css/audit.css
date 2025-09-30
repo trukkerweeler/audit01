@@ -581,6 +581,9 @@ dialog form {
 
 
 @media print {
+    #btnClose {
+        display: none;
+    }
     .btn {
         display: none;
     }

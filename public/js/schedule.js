@@ -1,88 +1,61 @@
-import { loadHeaderFooter, myport, getUserValue } from './utils.mjs';
+import { loadHeaderFooter, myport } from './utils.mjs';
 loadHeaderFooter();
 const port = myport();
-const url = `http://localhost:${port}/schedule`;
-const user = await getUserValue();
+const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATED_DATE'];
 
-// Send a POST request
-const form = document.querySelector('form');
-form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const data = new FormData(form);
-    const nextAuditId = await fetch(url + '/nextAuditId', { method: 'GET' })
-    .then(response => response.json())
-    .then (data => {
-        JSON.stringify(data);
-        return data;
-    })
-    const nextManagerId = await fetch(url + '/nextManagerId', { method: 'GET' })
-    .then(response => response.json())
-    .then (data => {
-        JSON.stringify(data);
-        return data;
-    })
-    // console.log(nextId);
+const url = `http://localhost:${port}/schedule`;
+
+function getRecords () {
+    const main = document.querySelector('main');
     
-    let myRequestDate = new Date();
-    myRequestDate.setDate(myRequestDate.getDate());
-    myRequestDate = myRequestDate.toISOString().slice(0, 10);
-    
-    const dataJson = {
-        AUDIT_MANAGER_ID: nextManagerId,
-        AUDIT_ID: nextAuditId,
-        CREATE_DATE: myRequestDate,
-        CREATE_BY: user,
-    };
-    for (let field of data.keys()) {
-        // console.log(field);
-        switch (field) {
-            case 'LEAD_AUDITOR':
-                dataJson[field] = data.get(field).toUpperCase();
-                break;
-            case 'AUDITEE':
-                dataJson[field] = data.get(field).toUpperCase();
-                break;
-            case 'AUDITEE1':
-                dataJson[field] = data.get(field).toUpperCase();
-                break;
-            case 'SUBJECT':
-                dataJson[field] = data.get(field).toUpperCase();
-                break;
-            case 'RESULT':
-                dataJson[field] = data.get(field).toUpperCase();
-                break;
-            default:
-                if (field[field.length - 4] === '_DATE') {
-                    let myDate = data.get(field);
-                    myDate = myDate.slice(0, 10);
-                    dataJson[field] = myDate;
-                    // break;
-                } else {
-                    dataJson[field] = data.get(field);
+    fetch(url, { method: 'GET' })
+
+    .then(response => response.json())
+    .then(records => {
+        // console.log(records);
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const tbody = document.createElement('tbody');
+        const header = document.createElement('tr');
+        const td = document.createElement('td');
+        
+        for (let key in records[0]) {
+            if (!skippers.includes(key)){
+            const th = document.createElement('th');
+            th.textContent = key;
+            header.appendChild(th);
+            }
+        }
+        thead.appendChild(header);
+
+        for (let record of records) {
+            const tr = document.createElement('tr');
+            for (let key in record) {
+                const td = document.createElement('td');
+                if (!skippers.includes(key)) {
+                    if (key !== null) {
+                        if (key.substring(key.length - 4) === 'DATE' && key.length > 0 && record[key] !== null) {
+                            td.textContent = record[key].slice(0,10);
+                        } else {
+                            if (key == 'AUDIT_MANAGER_ID') {
+                                td.innerHTML = `<a href="http://localhost:${port}/manager.html?id=${record[key]}">${record[key]}</a>`;
+                            } else {
+                                td.textContent = record[key];
+                            }
+                        }
+                    } else {
+                        td.textContent = record[key];
+                    }
+                    tr.appendChild(td);
                 }
         }
-    }
-    console.log("56");
-    console.log(dataJson);
-
-    try {
-        await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-                },
-            body: JSON.stringify(dataJson)
-        });
-        // console.log('Success:', JSON.stringify(dataJson));
+            tbody.appendChild(tr);
         }
-        catch (err) {
-            console.log('Error:', err);
-        }
-    
-    form.reset();
-});
 
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        main.appendChild(table);
+    })
+}
 
-
-
-
+getRecords();
