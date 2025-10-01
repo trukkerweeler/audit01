@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = `select * from PROCESS_AUDIT order by AUDIT_ID desc`;
+        const query = `select * from AUDIT_MANAGER order by AUDIT_MANAGER_ID desc`;
         
         connection.query(query, (err, rows, fields) => {
             if (err) {
@@ -174,8 +174,7 @@ router.post('/', (req, res) => {
                 return;
             }
             res.json(rows);
-        });
-        
+        });        
 
         const updateQuery = `UPDATE SYSTEM_IDS SET CURRENT_ID = '${req.body.AUDIT_ID}' WHERE TABLE_NAME = 'AUDIT'`;
         connection.query(updateQuery, (err, rows, fields) => {

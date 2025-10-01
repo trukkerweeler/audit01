@@ -3,7 +3,7 @@ loadHeaderFooter();
 const port = myport();
 const skippers = ['ASST_AUDITOR1','ASST_AUDITOR2','ASST_AUDITOR3', 'AUDITEE2', 'AUDITEE_FUNCTION','SCORE', 'RESULT', 'ENTITY_ID', 'MODIFIED_BY', 'MODIFIED_DATE', 'CREATE_BY', 'CREATE_DATE'];
 
-const url = `http://localhost:${port}/schedule`;
+const url = `http://localhost:${port}/audit`;
 
 function getRecords () {
     const main = document.querySelector('main');

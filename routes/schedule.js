@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
             }
         // console.log('Connected to DB');
 
-        const query = `select * from AUDIT_MANAGER order by AUDIT_MANAGER_ID desc`;
+        const query = `SELECT * FROM AUDIT_MANAGER WHERE YEAR(SCHEDULED_DATE) = YEAR(CURDATE()) ORDER BY AUDIT_MANAGER_ID DESC`;
         
         connection.query(query, (err, rows, fields) => {
             if (err) {
