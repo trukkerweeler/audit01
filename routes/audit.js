@@ -128,7 +128,7 @@ router.get('/nextAuditManagerId', (req, res) => {
 // Create a record
 router.post('/', (req, res) => {
     // console.log('102');
-    // console.log(req.body);
+    console.log("Audit Manager: " + JSON.stringify(req.body));
     try {
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -352,7 +352,7 @@ router.put('/close/:id', (req, res) => {
 });
 
 router.post('/copycklst', (req, res) => {
-    console.log(req.body);
+    // console.log("Checklist: " + JSON.stringify(req.body));
     try {
         const { oldAuditManagerId, newAuditManagerId } = req.body;
         const connection = mysql.createConnection({
@@ -388,7 +388,7 @@ router.post('/copycklst', (req, res) => {
 });
 
 router.post('/copyReferences', (req, res) => {
-    console.log(req.body);
+    // console.log("References: " + JSON.stringify(req.body));
     try {
         const { oldAuditManagerId, newAuditManagerId } = req.body;
         const connection = mysql.createConnection({

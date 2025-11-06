@@ -1,4 +1,10 @@
-import { loadHeaderFooter, getUserValue, getDateTime, getcodedesc, myport } from "./utils.mjs";
+import {
+  loadHeaderFooter,
+  getUserValue,
+  getDateTime,
+  getcodedesc,
+  myport,
+} from "./utils.mjs";
 loadHeaderFooter();
 
 // get user value
@@ -25,6 +31,23 @@ fetch(url, { method: "GET" })
   .then((record) => {
     // console.log(record);
 
+    // Create main title with close button
+    const h1 = document.createElement("h1");
+    h1.textContent = "Audit Manager";
+
+    const btnClose = document.createElement("button");
+    btnClose.textContent = "Close";
+    btnClose.classList.add("btn");
+    btnClose.classList.add("btn-primary");
+    btnClose.id = "btnClose";
+
+    const divMainTitle = document.createElement("div");
+    divMainTitle.classList.add("main-title");
+    divMainTitle.appendChild(h1);
+    divMainTitle.appendChild(btnClose);
+
+    main.appendChild(divMainTitle);
+
     // Detail header div
     const divDetailHeader = document.createElement("div");
     divDetailHeader.classList.add("detailheader");
@@ -34,22 +57,25 @@ fetch(url, { method: "GET" })
     section.classList.add("details");
     const h2 = document.createElement("h2");
     h2.textContent = "Details";
+
+    // Create a div for h2 and edit button
+    const divTitleAndEdit = document.createElement("div");
+    divTitleAndEdit.classList.add("title-and-edit");
+    divTitleAndEdit.appendChild(h2);
+
     // add button to section
     const btneditdetail = document.createElement("button");
     btneditdetail.textContent = "Edit";
     btneditdetail.classList.add("btn");
     btneditdetail.classList.add("btn-primary");
     btneditdetail.id = "btnEditDetail";
-    const btnClose = document.createElement("button");
-    btnClose.textContent = "Close";
-    btnClose.classList.add("btn");
-    btnClose.classList.add("btn-primary");
-    btnClose.id = "btnClose";
+
+    // Add edit button to the title div
+    divTitleAndEdit.appendChild(btneditdetail);
+
     const divDetailBtns = document.createElement("div");
     divDetailBtns.classList.add("detailbtns");
-    divDetailBtns.appendChild(h2);
-    divDetailBtns.appendChild(btneditdetail);
-    divDetailBtns.appendChild(btnClose);
+    divDetailBtns.appendChild(divTitleAndEdit);
 
     // divDetailHeader.appendChild(h2);
     divDetailHeader.appendChild(divDetailBtns);
@@ -80,14 +106,15 @@ fetch(url, { method: "GET" })
         if (key == "COMPLETION_DATE" && record[0][key] == null) {
           p.textContent = key.replace(/_/g, " ") + ": ";
         } else {
-        p.textContent = key + ": " + new Date(record[0][key]).toLocaleDateString();
-      }
+          p.textContent =
+            key + ": " + new Date(record[0][key]).toLocaleDateString();
+        }
       }
 
       if (key == "AUDIT_ID") {
         p.textContent = key.replace(/_/g, " ") + ": " + record[0][key];
         p.setAttribute("id", "audit_id");
-      }      
+      }
 
       section.appendChild(p);
     }
@@ -206,7 +233,6 @@ fetch(url, { method: "GET" })
         }
       });
     main.appendChild(sectionChecklist);
-
 
     const btnAddQust = document.getElementById("btnAddQust");
     btnAddQust.addEventListener("click", async (e) => {
@@ -379,7 +405,6 @@ fetch(url, { method: "GET" })
         });
       // alert to send results email
       alert("Send results email to auditee");
-
     });
 
     // listen for btnEditObs click, open dialog, populate fields, associate checklist id
@@ -395,7 +420,7 @@ fetch(url, { method: "GET" })
         // show the dialog
         editObsDialog.showModal();
         // set the value after the dialog is shown
-        document.getElementById("obsid").textContent = checklistId;        
+        document.getElementById("obsid").textContent = checklistId;
       }
 
       // listen for the saveobservation button
@@ -420,7 +445,7 @@ fetch(url, { method: "GET" })
         console.log(newRecord);
 
         // post the new record
-        fetch(checklistUrl + '/obsn', {
+        fetch(checklistUrl + "/obsn", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -439,7 +464,5 @@ fetch(url, { method: "GET" })
             window.location.reload();
           });
       });
-      
     });
-
   });

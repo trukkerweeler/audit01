@@ -67,7 +67,7 @@ button.addEventListener('click', async (event) => {
         newAudit.MODIFIED_DATE = null;
         newAudit.RESULT = '';
         newAudit.SCORE = null;
-        newAudit.SCHEDULED_DATE = null;
+        newAudit.SCHEDULED_DATE = getDateTime();
         // console.log('New Audit Data:', newAudit);
 
         // Post the new audit
